@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The River Leaves Its Banks · Brahmaputra SAR Flood Atlas</title>
+<title>Kaziranga Monsoon Water Observatory · NASA-ISRO NISAR L-Band SAR</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -14,89 +14,115 @@
 html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'Lora',Georgia,serif}
 .mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
-.side{background:var(--paper);border-right:1px solid var(--rule);padding:22px 22px 28px}
-.kick,.lab,.tag,.seg button,th,.foot{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.07em;font-size:10.5px}
+.side{background:var(--paper);border-right:1px solid var(--rule);padding:20px 22px 28px}
+.kick,.lab,.tag,.seg button,th,.foot,.guide{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;font-size:10.5px}
 .kick{color:var(--sienna)}
-h1{font-size:29px;line-height:1.08;font-weight:700;margin:8px 0 10px}
-.dek{font-style:italic;font-size:15px;line-height:1.45;margin:0 0 10px}
-.spec{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:7px 0;margin-bottom:20px}
-.lab{display:block;color:var(--mute);border-bottom:1px solid var(--rule);padding-bottom:5px;margin:22px 0 10px}
+h1{font-size:26px;line-height:1.12;font-weight:700;margin:6px 0 8px}
+.dek{font-style:italic;font-size:14px;line-height:1.45;margin:0 0 10px}
+.spec{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--mute);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:6px 0;margin-bottom:16px}
+.lab{display:block;color:var(--mute);border-bottom:1px solid var(--rule);padding-bottom:4px;margin:18px 0 9px}
 .rgrid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
-.rgrid button{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:transparent;padding:9px 8px;text-align:left;font:500 11.5px/1.25 'IBM Plex Mono',monospace;cursor:pointer;color:var(--ink)}
+.rgrid button{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:transparent;padding:8px;text-align:left;font:500 11px/1.25 'IBM Plex Mono',monospace;cursor:pointer;color:var(--ink)}
 .rgrid button.on{background:var(--ink);color:var(--paper)}
-#rtext{font-size:14px;line-height:1.5;margin:10px 0 0}
-.alert{border-left:3px solid var(--ink);padding:4px 0 4px 10px;font-size:14px;line-height:1.4;margin-bottom:12px}
-.alert b{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;display:block}
+#rtext{font-size:13px;line-height:1.48;margin:8px 0 0;color:#27272A}
+.headline-box{background:#EFECE4;border:1px solid var(--rule);padding:10px 12px;font-size:14px;line-height:1.42;margin-bottom:10px;font-weight:500}
+.alert{border-left:3px solid var(--ink);padding:4px 0 4px 10px;font-size:13px;line-height:1.42;margin-bottom:12px}
+.alert b{font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.08em;display:block;margin-bottom:2px}
 .alert.crit{border-color:var(--sienna)}.alert.crit b{color:var(--sienna)}
-table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:12px}
+table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
 th{font-weight:400;color:var(--mute);text-align:left;padding:5px 0;border-bottom:1px solid var(--ink)}
-td{padding:7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td{padding:6.5px 0;border-bottom:1px solid var(--rule);vertical-align:top}
 td:nth-child(n+2),th:nth-child(n+2){text-align:right;padding-left:8px}
 td:nth-child(2){font-weight:500}
-.dl{margin-top:12px;width:100%;border:1px solid var(--ink);background:transparent;padding:9px;font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--ink)}
+.dl{margin-top:12px;width:100%;border:1px solid var(--ink);background:transparent;padding:8px;font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--ink)}
 .dl:hover{background:var(--ink);color:var(--paper)}
-details{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);margin-top:22px}
-summary{cursor:pointer;padding:9px 0;font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.07em;text-transform:uppercase;list-style:none}
+details{border-top:1px solid var(--rule);margin-top:14px}
+details.top-rule{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+summary{cursor:pointer;padding:8px 0;font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.07em;text-transform:uppercase;list-style:none}
 summary::-webkit-details-marker{display:none}
 summary::before{content:'+ ';}details[open] summary::before{content:'\2212 ';}
-details p{font-size:14px;line-height:1.55;margin:0 0 10px}
-.foot{color:var(--mute);margin-top:18px;line-height:1.6;text-transform:none;letter-spacing:0;font-size:10.5px}
+details p, details ul{font-size:13px;line-height:1.5;margin:0 0 9px}
+details ul{padding-left:18px}
+.foot{color:var(--mute);margin-top:14px;line-height:1.55;text-transform:none;letter-spacing:0;font-size:10.5px}
 #map{background:var(--paper)}
-.ov{position:absolute;top:0;left:0;right:0;z-index:1000;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:flex-start;padding:12px;pointer-events:none}
-.tag,.seg{background:var(--paper);border:1px solid var(--ink);pointer-events:auto}
+.ov{position:absolute;top:0;left:0;right:0;z-index:1000;display:flex;flex-direction:column;gap:6px;padding:12px;pointer-events:none}
+.ov-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:flex-start}
+.tag,.seg,.guide,.legend-bar{background:var(--paper);border:1px solid var(--ink);pointer-events:auto}
+.guide{padding:5px 10px;font-size:10px;color:var(--ink);align-self:center;background:#EFECE4}
 .tag{padding:6px 9px;display:flex;align-items:center;gap:7px}
-.sw{width:10px;height:10px;display:inline-block;border:1px solid var(--ink)}
-.seg{display:flex}.seg button{background:transparent;border:0;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.legend-bar{padding:6px 10px;font:400 11px/1.35 'IBM Plex Mono',monospace;align-self:flex-end;max-width:460px}
+.sw{width:10px;height:10px;display:inline-block;border:1px solid var(--ink);shrink:0}
+.seg{display:flex}.seg button{background:transparent;border:0;padding:6px 10px;cursor:pointer;color:var(--ink)}
 .seg button+button{border-left:1px solid var(--ink)}.seg button.on{background:var(--ink);color:var(--paper)}
 #dv{position:absolute;top:0;bottom:0;width:30px;margin-left:-15px;z-index:999;cursor:ew-resize;touch-action:none}
 #dv::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:1px;background:var(--ink)}
 #dv button{position:absolute;left:0;top:50%;margin-top:-15px;width:30px;height:30px;background:var(--paper);border:1px solid var(--ink);font:500 13px 'IBM Plex Mono',monospace;cursor:ew-resize;color:var(--ink)}
-#time{border-top:1px solid var(--ink);background:var(--paper);padding:10px 18px 8px}
-.stops{display:grid;grid-template-columns:repeat(4,1fr);margin-top:2px}
-.stops button{background:transparent;border:0;cursor:pointer;color:var(--mute);padding:2px 0;font:500 11px/1.3 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
-.stops button small{display:block;font-weight:400;font-size:10px;text-transform:none;letter-spacing:0}
+#time{border-top:1px solid var(--ink);background:var(--paper);padding:9px 16px 8px}
+.stops{display:grid;grid-template-columns:repeat(10,1fr);margin-top:4px;gap:2px}
+.stops button{background:transparent;border:0;cursor:pointer;color:var(--mute);padding:2px 0;font:500 10px/1.25 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.02em}
+.stops button small{display:block;font-weight:400;font-size:9px;text-transform:none;letter-spacing:0}
 .stops button.on{color:var(--ink)}.stops button.on b{border-bottom:2px solid var(--sienna)}
 input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:100%;height:20px;margin:0;cursor:pointer}
 input[type=range]::-webkit-slider-runnable-track{height:1px;background:var(--ink)}
 input[type=range]::-moz-range-track{height:1px;background:var(--ink)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-6px;background:var(--ink);border:0;border-radius:0}
 input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--ink);border:0;border-radius:0}
-.rlab{font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.09em;text-align:center;color:var(--ink);text-shadow:0 0 3px var(--paper),0 0 3px var(--paper),0 0 3px var(--paper)}
 .leaflet-bar,.leaflet-bar a{border-radius:0!important;box-shadow:none!important;border:1px solid var(--ink)!important;background:var(--paper)!important;color:var(--ink)!important}
 .leaflet-bar a+a{border-top:0!important}
-.leaflet-control-attribution{background:rgba(247,245,240,.9)!important;font:10px 'IBM Plex Mono',monospace}
-.leaflet-tile-pane{filter:sepia(.18) saturate(.75)}
+.leaflet-control-attribution{background:rgba(247,245,240,.92)!important;font:10px 'IBM Plex Mono',monospace}
+.leaflet-tile-pane{filter:sepia(.12) saturate(.85)}
+.bbox-rect{stroke:var(--ink);stroke-width:1.2;stroke-dasharray:4 4;fill:none}
 </style>
 </head>
 <body class="flex flex-col md:flex-row">
 
-<aside class="side w-full md:w-[390px] md:shrink-0 h-[46vh] md:h-full overflow-y-auto">
+<aside class="side w-full md:w-[410px] md:shrink-0 h-[50vh] md:h-full overflow-y-auto">
   <div class="kick">NASA Space Apps 2026 · Dancing with the SARs</div>
-  <h1>The River Leaves Its Banks</h1>
-  <p class="dek">Every monsoon the Brahmaputra spreads across Assam’s floodplain beneath a lid of cloud. Radar sees through it.</p>
-  <div class="spec">Sentinel-1 C-band · VV · 10 m &nbsp;|&nbsp; NASA-ISRO NISAR L-band</div>
+  <h1>Kaziranga Monsoon Water Observatory</h1>
+  <p class="dek">Watching seasonal water expand and retreat across the Brahmaputra–Kaziranga floodplain through cloud cover using NASA-ISRO NISAR L-band radar.</p>
+  <div class="spec">NISAR L2 GCOV · L-band HH+HV · Cropped Track 040 Frame 015 · 10 m</div>
 
-  <span class="lab" style="margin-top:0">Region quick-jump</span>
+  <span class="lab" style="margin-top:0">Zoom to an area</span>
   <div class="rgrid" id="rgrid"></div>
   <p id="rtext"></p>
 
-  <span class="lab">Telemetry &amp; impact</span>
+  <span class="lab">What the radar saw</span>
+  <div class="headline-box" id="headline">Loading 2026 observations...</div>
   <div class="alert" id="alert"></div>
   <table>
-    <thead><tr><th>Metric</th><th id="thStop">Jul</th><th>Δ vs Feb</th></tr></thead>
+    <thead><tr><th>Measurement</th><th id="thStop">Jul 22</th><th>vs. Oct 14</th></tr></thead>
     <tbody id="tbody"></tbody>
   </table>
-  <button class="dl" id="dl">Download Flood Report (CSV)</button>
-  <div class="foot">Data status: <span id="status">illustrative placeholders, not measured values</span>.</div>
-
-  <span class="lab">Rainfall vs. radar-detected water</span>
-  <div style="height:190px"><canvas id="chart"></canvas></div>
 
   <details>
-    <summary>Methodology note</summary>
-    <p>Radar supplies its own light. The satellite sends a microwave pulse and records the echo. Calm floodwater acts like a mirror: it deflects the pulse away from the sensor (specular reflection), so almost nothing returns and the pixel reads dark, below about −18 dB in VV. Rough ground, crops and buildings scatter energy back and read bright.</p>
-    <p>Microwaves pass through cloud, so monsoon skies do not interrupt the record the way they do for optical sensors such as Sentinel-2.</p>
-    <p>Dense canopy is a harder case. Sentinel-1’s C-band (about 5.6 cm wavelength) is largely scattered by leaves. NISAR’s L-band (about 24 cm) reaches the forest floor in places like Kaziranga, and water under vegetation returns a strong double-bounce echo, a bright signature that a simple dark-pixel threshold would miss.</p>
+    <summary>Radar details (advanced)</summary>
+    <table>
+      <tbody id="advBody"></tbody>
+    </table>
+    <p style="margin-top:8px"><strong>Why HH over HV?</strong> Across all 10 dates, HHHH separates calm water from land by <strong>10.5 dB</strong> on average vs. <strong>8.5 dB</strong> for HVHV, because tall floodplain grass scatters HV energy back to the satellite.</p>
+  </details>
+
+  <button class="dl" id="dl">Download NISAR Time Series (CSV)</button>
+  <div class="foot">Data source: <span id="status">Loading NISAR L2 GCOV metrics...</span></div>
+
+  <span class="lab">Water-covered area &amp; cutoff sensitivity (km²)</span>
+  <div style="height:185px"><canvas id="chart"></canvas></div>
+
+  <details class="top-rule">
+    <summary>How to read this &amp; limits</summary>
+    <p><strong>1. Ecological context (Kaziranga 2026):</strong> Seasonal inundation is vital for Kaziranga's grasslands and wetlands. On 21 July 2026 (one day before our Jul 22 image), park officials reported normal seasonal wetting with only 4 forest camps inundated and no flood emergency—so this observatory tracks <em>surface-water dynamics</em> across the river + park corridor rather than claiming a flood disaster.</p>
+    <p><strong>2. What "water-covered" means:</strong> Calm water acts like a mirror to L-band radar (&lt; −15.5 dB in HHHH). Flooded rice paddies, permanent river channels, wetlands (<em>beels</em>), and smooth wet mudflats all share this dark signature.</p>
+    <p><strong>3. Permanent instrument gap:</strong> NISAR experienced a permanent instrument data gap from <strong>27 July to 10 August 2026</strong> (Cycle 027 does not exist), so the absolute seasonal peak may have occurred during that window.</p>
+  </details>
+
+  <details>
+    <summary>Future uses</summary>
+    <ul>
+      <li>Clip directly to official Kaziranga National Park &amp; Tiger Reserve boundary polygons to compute exact inside-park inundation percentages.</li>
+      <li>Combine L-band HH/HV double-bounce ratios with elevation (DEM) to detect standing water hidden beneath tall elephant grass and forest canopy.</li>
+      <li>Pair NISAR 12-day passes with daily NASA GPM IMERG rainfall and Central Water Commission (CWC) river gauge levels.</li>
+      <li>Support park managers in monitoring highland wildlife refuge accessibility during high-water pulses.</li>
+    </ul>
   </details>
 </aside>
 
@@ -104,239 +130,293 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--ink)
   <div id="mapwrap" class="relative flex-1 min-h-0">
     <div id="map" class="absolute inset-0"></div>
     <div class="ov">
-      <div class="tag" id="tagL"><i class="sw" style="background:#0F2942"></i>Mar · Pre-monsoon baseline</div>
-      <div class="seg" role="group" aria-label="Monsoon layer">
-        <button id="mOpt">Optical · Sentinel-2</button><button id="mSar" class="on">Radar · SAR</button>
+      <div class="guide" id="guideChip">1. Drag the center line to compare · 2. Pick a date below · 3. Switch the view</div>
+      <div class="ov-row">
+        <div class="tag" id="tagL"><i class="sw" style="background:#1D4ED8"></i>Oct 14 UTC · Low-water baseline</div>
+        <div class="seg" role="group" aria-label="Visualization layer">
+          <button id="mWater" class="on">Where water is</button>
+          <button id="mRgb">Raw radar view</button>
+          <button id="mFreq">How often wet</button>
+        </div>
+        <div class="tag" id="tagR"></div>
       </div>
-      <div class="tag" id="tagR"></div>
+      <div class="legend-bar" id="legendBar"></div>
     </div>
     <div id="dv"><button id="dvb" aria-label="Drag to compare">‹›</button></div>
   </div>
   <footer id="time">
-    <div class="lab" style="border:0;margin:0 0 4px;padding:0">The Seasonal Pulse</div>
-    <div style="margin:0 12.5%;width:75%"><input type="range" id="rng" min="0" max="3" step="1" value="2" aria-label="Season"></div>
+    <div class="lab" style="border:0;margin:0 0 4px;padding:0">2026 Monsoon Timeline (Dates in UTC · IST is next morning · Instrument gap Jul 27–Aug 10)</div>
+    <div style="margin:0 5%;width:90%"><input type="range" id="rng" min="0" max="9" step="1" value="3" aria-label="Acquisition date"></div>
     <div class="stops" id="stops"></div>
   </footer>
 </main>
 
 <script>
-/* =====================================================================
-   1. CONFIG & SCENARIO TABLE
-   ===================================================================== */
-const SIENNA='#C2410C',PRUS='#0F2942',BLUE='#1D4ED8';
-// Per-stop scenario. `stage` drives the synthetic river width; area/db/hab/pop are
-// illustrative placeholders that get replaced by GEE-derived values when real data loads.
-const STOPS=[
- {k:'feb',lab:'Feb',sub:'Dry baseline',win:'February',stage:.38,cloud:.10,month:1,area:2150,db:-9.4,hab:4,pop:210000,
-  alert:['BASELINE','Channels at seasonal low. This is the reference state for change detection.']},
- {k:'may',lab:'May',sub:'Early rising',win:'May',stage:.75,cloud:.60,month:4,area:3480,db:-10.3,hab:11,pop:880000,
-  alert:['WATCH','Pre-monsoon rain is filling secondary channels and low-lying wetlands.']},
- {k:'jul',lab:'Jul',sub:'Peak inundation',win:'July',stage:1.8,cloud:1,month:6,area:11640,db:-13.6,hab:38,pop:4620000,crit:1,
-  alert:['CRITICAL','Peak inundation. Floodwater has spread across the south-bank lowlands.']},
- {k:'oct',lab:'Oct',sub:'Receding',win:'October',stage:1.05,cloud:.45,month:9,area:5210,db:-11.1,hab:17,pop:1790000,
-  alert:['RECEDING','Water is retreating, but large areas remain saturated.']}
+const SIENNA = '#C2410C', PRUS = '#0F2942', BLUE = '#1D4ED8';
+
+const REGIONS = [
+  { k: 'study', lab: 'Full Study Box (2,176 km²)', c: [26.64, 93.30], z: 10, t: 'Cropped Track 040 Frame 015 window (31.2 km × 69.8 km) spanning the Brahmaputra channel and Kaziranga floodplain.' },
+  { k: 'central', lab: 'Central Kaziranga & Beels', c: [26.63, 93.38], z: 12, t: 'Core floodplain grasslands and wetlands (beels). On Jul 22, dark water-like surfaces appear much wider south of the main channel.' },
+  { k: 'braid', lab: 'Brahmaputra Braided Belt', c: [26.71, 93.48], z: 12, t: 'Permanent multi-channel river belt. Comparing Oct 14 (left) with Jul 22 (right) shows mid-channel bars appearing submerged at higher river stage.' },
+  { k: 'west', lab: 'Western Floodplain Sector', c: [26.58, 93.08], z: 12, t: 'Western floodplain corridor near Jakhalabandha where seasonal backwater spreads across low-lying grasslands and adjacent fields.' }
 ];
-const BASE_STAGE=.35; // March baseline
-const REGIONS=[
- {k:'valley',lab:'Assam Valley Overview',c:[26.58,93.17],z:8,t:'The Brahmaputra corridor from upper Assam to Guwahati. The channel is a braided belt of a few kilometres in March and spreads across the floodplain at the July peak.'},
- {k:'kaz',lab:'Kaziranga Wildlife Corridor',c:[26.62,93.40],z:10,t:'A UNESCO World Heritage site on the river’s south bank. Annual floods push wildlife toward the southern highlands, and tall grass and canopy hide much of the water from C-band.'},
- {k:'mor',lab:'Morigaon Agricultural Belt',c:[26.33,92.36],z:10,t:'Low-lying farmland on the south bank, among the most flood-exposed cropland in the valley. Fields show up as dark water patches once the river overtops its banks.'},
- {k:'maj',lab:'Majuli River Island',c:[27.04,94.17],z:10,t:'One of the world’s largest river islands, losing land to bank erosion each monsoon. The island is the unflooded hole in the water mask.'}
-];
-const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-// TODO: REPLACE WITH REAL GEE / CHIRPS monthly rainfall (mm) and Sentinel-1 water extent (km²), both printed by the GEE script
-const RAIN=[12,18,52,150,290,360,380,320,260,120,25,8];
-const EXT=[2100,2150,2400,3100,3480,6900,11640,9800,7300,5210,3000,2300];
-// TODO: REPLACE WITH REAL GEE / SENTINEL-1 GEOJSON. Serve this folder over http (fetch is blocked on file://).
-// Expected files: baseline_mar.geojson, flood_feb.geojson, flood_may.geojson, flood_jul.geojson, flood_oct.geojson
-const REAL_DATA_BASE=''; // e.g. './data'
 
-/* =====================================================================
-   2. SYNTHETIC BRAIDED-RIVER GEOMETRY (placeholder for real GeoJSON)
-   Hand-placed centreline waypoints (lon,lat), densest along Kaziranga's
-   north boundary, smoothed with a Catmull-Rom spline.
-   ===================================================================== */
-const W=[[94.95,27.20],[94.72,27.17],[94.50,27.13],[94.30,27.09],[94.10,27.03],[93.97,26.95],[93.86,26.88],[93.76,26.82],
- [93.67,26.775],[93.58,26.74],[93.50,26.715],[93.42,26.70],[93.34,26.695],[93.26,26.69],[93.18,26.695],[93.10,26.70],
- [93.02,26.685],[92.94,26.66],[92.86,26.64],[92.79,26.625],[92.70,26.58],[92.62,26.53],[92.54,26.49],[92.46,26.44],
- [92.38,26.40],[92.30,26.375],[92.20,26.34],[92.10,26.31],[91.98,26.27]];
-const KX=Math.cos(26.6*Math.PI/180);
-const rng=s=>()=>(s=(s*1664525+1013904223)>>>0)/4294967296;
-function noise1(n,seed){const r=rng(seed),v=Array.from({length:n},()=>r());return t=>{const i=Math.floor(t),f=t-i,u=f*f*(3-2*f);return v[i]*(1-u)+v[i+1]*u}}
-function cr(a,b,c,d,t){const t2=t*t,t3=t2*t;return a.map((_,k)=>.5*(2*b[k]+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t2+(-a[k]+3*b[k]-3*c[k]+d[k])*t3))}
-const C=[];
-for(let i=0;i<W.length-1;i++)for(let s=0;s<12;s++)C.push(cr(W[Math.max(i-1,0)],W[i],W[i+1],W[Math.min(i+2,W.length-1)],s/12));
-C.push(W[W.length-1]);
-const N=C.length;
-const NRM=C.map((_,i)=>{const a=C[Math.max(i-1,0)],b=C[Math.min(i+1,N-1)],tx=(b[0]-a[0])*KX,ty=b[1]-a[1],l=Math.hypot(tx,ty);return[-ty/l,tx/l]}); // left of flow = south bank
-const off=(i,d)=>[C[i][0]+NRM[i][0]*d/KX,C[i][1]+NRM[i][1]*d];
-const lowN=[noise1(Math.ceil(N/7)+3,3),noise1(Math.ceil(N/7)+3,5)],hiN=[noise1(Math.ceil(N/1.6)+3,9),noise1(Math.ceil(N/1.6)+3,11)];
-// regional flood boosts: [centre lon,lat], radius (deg), extra spread south (L) / north (R)
-const FLD=[{c:[93.45,26.62],s:.45,L:2.2,R:.6},{c:[92.36,26.33],s:.35,L:3,R:.8},{c:[94.15,27.0],s:.35,L:2.2,R:2.2}];
-const gauss=(i,c,s)=>{const dx=(C[i][0]-c[0])*KX,dy=C[i][1]-c[1];return Math.exp(-(dx*dx+dy*dy)/(s*s))};
-const BL=C.map((_,i)=>1+FLD.reduce((a,r)=>a+r.L*gauss(i,r.c,r.s),0));
-const BR=C.map((_,i)=>1+FLD.reduce((a,r)=>a+r.R*gauss(i,r.c,r.s),0));
-const BRAID=C.map((_,i)=>1+2.5*gauss(i,[94.15,27.04],.3)); // permanently wide braided reach at Majuli
-function hw(i,st,side){
-  const s=side==='L'?0:1,g=Math.min(1,Math.max(0,(st-.4)/1.4));
-  return .05*st*(.6+.8*lowN[s](i/7))*(.85+.3*hiN[s](i/1.6))*BRAID[i]*(1+((side==='L'?BL[i]:BR[i])-1)*g);
-}
-const idxLon=lon=>C.reduce((b,p,i)=>Math.abs(p[0]-lon)<Math.abs(C[b][0]-lon)?i:b,0);
-const BARS=[{a:idxLon(94.38),b:idxLon(93.98),maj:1}];
-{const r=rng(21);let i=6;while(i<N-24){const len=8+Math.floor(r()*14);
-  if(i+len>=BARS[0].a-4&&i<=BARS[0].b+4){i=BARS[0].b+8;continue}
-  BARS.push({a:i,b:i+len});i+=len+6+Math.floor(r()*12)}}
-function floodFeature(st,props){
-  const L=[],Rr=[];
-  for(let i=0;i<N;i++){L.push(off(i,hw(i,st,'L')));Rr.push(off(i,-hw(i,st,'R')))}
-  const rings=[[...L,...Rr.reverse(),L[0]]],fr=Math.max(.15,.7-.28*st);
-  for(const b of BARS){
-    const f=b.maj?(st<1?.78:.55):fr,top=[],bot=[];
-    for(let i=b.a;i<=b.b;i++){
-      const s=(i-b.a)/(b.b-b.a),sh=Math.pow(Math.sin(Math.PI*s),.7)*f*Math.min(hw(i,st,'L'),hw(i,st,'R'));
-      top.push(off(i,sh));bot.push(off(i,-sh));
-    }
-    rings.push([...top,...bot.reverse(),top[0]]);
-  }
-  return{type:'Feature',properties:props,geometry:{type:'Polygon',coordinates:rings}};
-}
-const fc=f=>({type:'FeatureCollection',features:Array.isArray(f)?f:[f]});
-// TODO: REPLACE WITH REAL GEE / SENTINEL-1 GEOJSON (DATA.base = March baseline, DATA.st[k] = flood extent per stop)
-const DATA={base:fc(floodFeature(BASE_STAGE,{stage:'baseline_mar'})),st:{}};
-STOPS.forEach(s=>DATA.st[s.k]=fc(floodFeature(s.stage,{stage:s.k})));
-
-// Simulated monsoon cloud deck (organic blobs along the corridor)
-function blob(cx,cy,r,seed){
-  const nn=noise1(14,seed),p=[];
-  for(let k=0;k<24;k++){const a=k/24*2*Math.PI,rr=r*(.65+.7*nn(k/2));p.push([cx+Math.cos(a)*rr*1.4,cy+Math.sin(a)*rr*.8])}
-  p.push(p[0]);return{type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[p]}};
-}
-const CL=(()=>{const r=rng(77),F=[];
-  for(let n=0;n<15;n++){const p=C[Math.floor((n+.5)/15*(N-1))];F.push(blob(p[0]+(r()-.5)*.25,p[1]+(r()-.5)*.3,.16+r()*.14,n+40))}
-  return[...Array(15).keys()].map(n=>F[(n*7)%15]);})();
-
-/* =====================================================================
-   3. MAP, PANES & SWIPE
-   (Vector polygons cannot be clipped by leaflet-side-by-side, which needs
-   tile-layer containers, so the swipe clips three custom panes directly.)
-   ===================================================================== */
 const $=s=>document.querySelector(s);
-const S={i:2,mode:'radar',f:.5,x:0,region:'valley'};
-const map=L.map('map',{center:[26.58,93.17],zoom:8,zoomControl:false,attributionControl:true});
-L.control.zoom({position:'bottomleft'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,
-  attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
-const pB=map.createPane('pB'),pA=map.createPane('pA'),pC=map.createPane('pC');
-pB.style.zIndex=410;pA.style.zIndex=420;pC.style.zIndex=430;
-const bef=L.geoJSON(null,{pane:'pB',interactive:false,style:()=>({color:PRUS,weight:.6,fillColor:PRUS,fillOpacity:.88})}).addTo(map);
-const aft=L.geoJSON(null,{pane:'pA',interactive:false,style:()=>({color:STOPS[S.i].crit?SIENNA:PRUS,weight:.8,fillColor:BLUE,fillOpacity:.72})}).addTo(map);
-const opt=L.geoJSON(null,{pane:'pA',interactive:false,style:()=>({color:'#5B6770',weight:.5,fillColor:'#5B6770',fillOpacity:.55})}).addTo(map);
-const cloud=L.geoJSON(null,{pane:'pC',interactive:false,style:()=>S.mode==='optical'
-  ?{stroke:false,fillColor:'#ECEBE7',fillOpacity:.96}
-  :{color:'#8C8780',weight:1,dashArray:'3 3',fill:false}}).addTo(map);
-[['KAZIRANGA NP',[26.57,93.42]],['MORIGAON',[26.27,92.36]],['MAJULI',[27.04,94.17]]].forEach(([t,c])=>
-  L.marker(c,{interactive:false,icon:L.divIcon({className:'rlab',html:t,iconSize:[110,14],iconAnchor:[55,7]})}).addTo(map));
+const S = { i: 3, mode: 'water', f: 0.5, x: 0, region: 'study', meta: null };
 
-function clip(){
-  const nw=map.containerPointToLayerPoint([0,0]),se=map.containerPointToLayerPoint(map.getSize()),cx=nw.x+S.x;
-  pB.style.clip=`rect(${nw.y}px,${cx}px,${se.y}px,${nw.x}px)`;
-  const r=`rect(${nw.y}px,${se.x}px,${se.y}px,${cx}px)`;pA.style.clip=r;pC.style.clip=r;
-}
-function place(){S.x=S.f*$('#map').clientWidth;$('#dv').style.left=S.x+'px';clip()}
-map.on('move zoom viewreset resize',clip);
-const dv=$('#dv');let drag=false;
-dv.addEventListener('pointerdown',e=>{drag=true;dv.setPointerCapture(e.pointerId)});
-dv.addEventListener('pointermove',e=>{if(!drag)return;const r=$('#map').getBoundingClientRect();S.f=Math.min(.98,Math.max(.02,(e.clientX-r.left)/r.width));place()});
-dv.addEventListener('pointerup',()=>drag=false);
-$('#dvb').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){S.f=Math.min(.98,Math.max(.02,S.f+(e.key==='ArrowLeft'?-.03:.03)));place()}});
-window.addEventListener('resize',()=>{map.invalidateSize();place()});
+// --- Map Setup (Keyless Esri World Topographic) ---
+const map = L.map('map', { center: [26.64, 93.30], zoom: 10, zoomControl: false, attributionControl: true });
+L.control.zoom({ position: 'bottomleft' }).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 18,
+  attribution: 'Tiles &copy; Esri | NASA-ISRO NISAR L2 GCOV'
+}).addTo(map);
 
-/* =====================================================================
-   4. SIDEBAR, TABLE, CHART, CSV
-   ===================================================================== */
-const fmtPop=p=>p>=1e6?(p/1e6).toFixed(2)+' M':Math.round(p/1e3)+' k';
-const pct=(a,b)=>(a>=b?'+':'−')+Math.abs(Math.round((a-b)/b*100)).toLocaleString('en-IN')+'%';
-Chart.defaults.font.family="'IBM Plex Mono',monospace";Chart.defaults.font.size=10;Chart.defaults.color='#18181B';
-const chart=new Chart($('#chart'),{type:'bar',data:{labels:MON,datasets:[
-  {type:'bar',label:'Rainfall (mm)',data:RAIN,backgroundColor:'#CFCAC0',yAxisID:'y',order:2,barPercentage:.7},
-  {type:'line',label:'SAR water extent (km²)',data:EXT,borderColor:PRUS,borderWidth:1.5,tension:.25,yAxisID:'y1',order:1,pointStyle:'rect'}]},
-  options:{responsive:true,maintainAspectRatio:false,animation:false,
-  plugins:{legend:{position:'bottom',labels:{boxWidth:9,boxHeight:9}}},
-  scales:{x:{grid:{display:false},border:{color:'#18181B'}},
-   y:{grid:{display:false},border:{display:false},title:{display:true,text:'mm'},ticks:{maxTicksLimit:4}},
-   y1:{position:'right',grid:{display:false},border:{display:false},title:{display:true,text:'km²'},ticks:{maxTicksLimit:4}}}}});
+const pB = map.createPane('pB');
+const pA = map.createPane('pA');
+pB.style.zIndex = 410;
+pA.style.zIndex = 420;
 
-function table(){
-  const m=STOPS[S.i],b=STOPS[0],first=S.i===0,d=(x)=>first?'—':x;
-  $('#thStop').textContent=m.lab;
-  $('#tbody').innerHTML=[
-   ['Submerged area (km<sup>2</sup>)',Math.round(m.area).toLocaleString('en-IN'),d(pct(m.area,b.area))],
-   ['Mean backscatter σ<sup>0</sup> (dB)',m.db.toFixed(1).replace('-','−'),d((m.db-b.db>=0?'+':'−')+Math.abs(m.db-b.db).toFixed(1)+' dB')],
-   ['Cropland / habitat affected (%)',m.hab.toFixed(0)+'%',d((m.hab-b.hab>=0?'+':'−')+Math.abs(m.hab-b.hab).toFixed(0)+' pp')],
-   ['Est. population exposed',fmtPop(m.pop),d(pct(m.pop,b.pop))]
-  ].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
-  const a=$('#alert');a.className='alert'+(m.crit?' crit':'');a.innerHTML=`<b>${m.alert[0]}</b>${m.alert[1]}`;
+let ovLeft = null, ovRight = null, studyRect = null;
+
+function clip() {
+  const nw = map.containerPointToLayerPoint([0, 0]);
+  const se = map.containerPointToLayerPoint(map.getSize());
+  if (S.mode === 'freq') {
+    // Full-width display for 10-date frequency map
+    pB.style.clip = 'rect(0px,0px,0px,0px)';
+    pA.style.clip = `rect(${nw.y}px,${se.x}px,${se.y}px,${nw.x}px)`;
+  } else {
+    const cx = nw.x + S.x;
+    pB.style.clip = `rect(${nw.y}px,${cx}px,${se.y}px,${nw.x}px)`;
+    pA.style.clip = `rect(${nw.y}px,${se.x}px,${se.y}px,${cx}px)`;
+  }
 }
-function csv(){
-  const H=['stop','date_window','sensor','polarisation','resolution_m','water_threshold_db','submerged_area_km2','mean_backscatter_db','cropland_habitat_affected_pct','population_exposed','data_status'];
-  const rows=STOPS.map(s=>[`${s.lab} (${s.sub})`,s.win,'Sentinel-1 C-band IW GRD','VV',10,-18,Math.round(s.area),s.db.toFixed(1),s.hab.toFixed(1),Math.round(s.pop),s.real?'gee_derived':'illustrative_placeholder']);
-  return '\uFEFF'+[H,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+function place() {
+  S.x = S.f * $('#map').clientWidth;
+  $('#dv').style.left = S.x + 'px';
+  clip();
 }
-$('#dl').addEventListener('click',()=>{
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv()],{type:'text/csv;charset=utf-8'}));
-  a.download='assam_flood_report.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+map.on('move zoom viewreset resize', clip);
+
+const dv = $('#dv');
+let drag = false;
+dv.addEventListener('pointerdown', e => { drag = true; dv.setPointerCapture(e.pointerId); });
+dv.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const r = $('#map').getBoundingClientRect();
+  S.f = Math.min(0.98, Math.max(0.02, (e.clientX - r.left) / r.width));
+  place();
+});
+dv.addEventListener('pointerup', () => drag = false);
+$('#dvb').addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    S.f = Math.min(0.98, Math.max(0.02, S.f + (e.key === 'ArrowLeft' ? -0.03 : 0.03)));
+    place();
+  }
+});
+window.addEventListener('resize', () => { map.invalidateSize(); place(); });
+
+// --- Chart Setup ---
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+Chart.defaults.color = '#18181B';
+const chart = new Chart($('#chart'), {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      { label: 'Water-covered (km²)', data: [], borderColor: BLUE, borderWidth: 2, tension: 0.25, fill: false, pointRadius: 4 },
+      { label: 'Looser cutoff (−13.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: false },
+      { label: 'Stricter cutoff (−17.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(156, 163, 175, 0.16)' }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, boxHeight: 8 } } },
+    scales: {
+      x: { grid: { display: false }, border: { color: '#18181B' } },
+      y: { grid: { color: '#E5E2DC' }, border: { display: false }, title: { display: true, text: 'km²' } }
+    }
+  }
 });
 
-/* =====================================================================
-   5. STATE RENDERING
-   ===================================================================== */
-function render(){
-  const s=STOPS[S.i],nC=Math.ceil(s.cloud*15);
-  bef.clearLayers().addData(DATA.base);
-  aft.clearLayers();opt.clearLayers();cloud.clearLayers();
-  if(S.mode==='radar')aft.addData(DATA.st[s.k]);else opt.addData(DATA.base);
-  cloud.addData(fc(CL.slice(0,nC)));
-  $('#tagR').innerHTML=S.mode==='radar'
-    ?`<i class="sw" style="background:${BLUE}"></i>${s.lab} · ${s.sub} · S-1 VV · σ⁰ &lt; −18 dB`
-    :`<i class="sw" style="background:#ECEBE7"></i>${s.lab} · Sentinel-2 optical · ~${Math.round(s.cloud*100)}% cloud`;
-  $('#mOpt').classList.toggle('on',S.mode==='optical');$('#mSar').classList.toggle('on',S.mode==='radar');
-  $('#rng').value=S.i;
-  [...$('#stops').children].forEach((b,i)=>b.classList.toggle('on',i===S.i));
-  const h=EXT.map((_,i)=>i===s.month);
-  chart.data.datasets[1].pointRadius=h.map(x=>x?5:0);
-  chart.data.datasets[1].pointBackgroundColor=h.map(x=>x?SIENNA:PRUS);
-  chart.update('none');table();
-}
-$('#stops').innerHTML=STOPS.map((s,i)=>`<button data-i="${i}"><b>${s.lab}</b><small>${s.sub}</small></button>`).join('');
-$('#stops').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.i=+b.dataset.i;render()}});
-$('#rng').addEventListener('input',e=>{S.i=+e.target.value;render()});
-$('#mOpt').onclick=()=>{S.mode='optical';render()};
-$('#mSar').onclick=()=>{S.mode='radar';render()};
-$('#rgrid').innerHTML=REGIONS.map(r=>`<button data-k="${r.k}">${r.lab}</button>`).join('');
-function region(k){
-  const r=REGIONS.find(x=>x.k===k);S.region=k;
-  [...$('#rgrid').children].forEach(b=>b.classList.toggle('on',b.dataset.k===k));
-  $('#rtext').textContent=r.t;map.flyTo(r.c,r.z,{duration:1.2});
-}
-$('#rgrid').addEventListener('click',e=>{const b=e.target.closest('button');if(b)region(b.dataset.k)});
-
-/* Real-data loader: each feature needs properties area_km2, mean_db, habitat_km2, pop_exposed (see GEE script) */
-const summ=fc=>{const p=fc.features.map(f=>f.properties),A=p.reduce((a,q)=>a+(q.area_km2||0),0)||1;
-  return{area:A,db:p.reduce((a,q)=>a+(q.area_km2||0)*(q.mean_db||0),0)/A,hab:100*p.reduce((a,q)=>a+(q.habitat_km2||0),0)/A,pop:p.reduce((a,q)=>a+(q.pop_exposed||0),0)}};
-async function loadReal(){
-  if(!REAL_DATA_BASE)return;
-  try{
-    const g=async f=>{const r=await fetch(`${REAL_DATA_BASE}/${f}.geojson`);if(!r.ok)throw new Error(f);return r.json()};
-    const base=await g('baseline_mar'),st={};
-    for(const s of STOPS)st[s.k]=await g('flood_'+s.k);
-    DATA.base=base;Object.assign(DATA.st,st);
-    STOPS.forEach(s=>Object.assign(s,summ(st[s.k]),{real:true}));
-    $('#status').textContent='derived from Sentinel-1 GEE exports';render();
-  }catch(e){console.warn('Real data not loaded; keeping synthetic layers.',e)}
+// --- UI Rendering ---
+function getPlainHeadline(d, base) {
+  const extra = d.water_km2 - base.water_km2;
+  const ratio = d.water_km2 / base.water_km2;
+  if (d.date === base.date) {
+    return `On ${d.label} UTC (${d.ist_label}), surface water is at its lowest level in the 2026 record (${d.water_km2.toFixed(0)} km²).`;
+  }
+  if (ratio >= 1.85) {
+    return `On ${d.label} UTC (${d.ist_label}), radar saw nearly twice as much water (+${extra.toFixed(0)} km²) as in October.`;
+  }
+  return `On ${d.label} UTC (${d.ist_label}), radar saw ${extra.toFixed(0)} km² more water-covered surface than in October.`;
 }
 
-map.whenReady(()=>{place();render();region('valley');loadReal()});
-setTimeout(()=>{map.invalidateSize();place()},300);
+function getAlert(d, baseArea) {
+  const ratio = d.water_km2 / baseArea;
+  if (d.date === '20261014') return { crit: false, title: 'LOW-WATER BASELINE', text: 'Driest post-monsoon observation in our 10-date series. Used as the left-hand comparison layer.' };
+  if (ratio >= 1.75) return { crit: true, title: 'HIGHEST WATER SEEN IN RECORD', text: `${d.description}. Note: a permanent NISAR instrument gap ran Jul 27–Aug 10, so higher water could have occurred between passes.` };
+  if (ratio >= 1.35) return { crit: false, title: 'ELEVATED MONSOON WATER', text: `${d.description}. Seasonal water covers low-lying wetlands and secondary river channels.` };
+  return { crit: false, title: 'MODERATE / RECEDING', text: `${d.description}. Surface water is retreating toward the permanent Brahmaputra channel.` };
+}
+
+function updateTable() {
+  if (!S.meta) return;
+  const dates = S.meta.dates;
+  const d = dates[S.i];
+  const base = dates[dates.length - 1];
+  const isBase = d.date === base.date;
+  const extraKm2 = d.water_km2 - base.water_km2;
+  const pct = (extraKm2 / base.water_km2) * 100;
+
+  $('#headline').textContent = getPlainHeadline(d, base);
+  $('#thStop').textContent = `${d.label} UTC`;
+
+  $('#tbody').innerHTML = [
+    ['Water-covered area', `${d.water_km2.toFixed(1)} km²`, isBase ? '—' : `+${extraKm2.toFixed(1)} km² (${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%)`],
+    ['Likely range (±2 dB cutoff)', `${d.water_low_km2.toFixed(0)}–${d.water_high_km2.toFixed(0)} km²`, '—'],
+    ['Permanent water (≥80% dates)', `${S.meta.permanent_water_km2.toFixed(0)} km²`, 'River & beels'],
+    ['Share of study box', `${d.water_pct_box.toFixed(1)}%`, isBase ? '—' : `${(d.water_pct_box - base.water_pct_box >= 0 ? '+' : '')}${(d.water_pct_box - base.water_pct_box).toFixed(1)} pp`]
+  ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+
+  $('#advBody').innerHTML = [
+    ['Scene mean HHHH', `${d.mean_hh_db.toFixed(2)} dB`],
+    ['Scene mean HVHV', `${d.mean_hv_db.toFixed(2)} dB`],
+    ['Primary water cutoff', `${d.threshold_db.toFixed(1)} dB (HHHH)`],
+    ['Robustness (Jul 22 #1 across cutoffs)', S.meta.jul22_highest_across_all_thresholds ? 'Confirmed (True)' : 'Varies']
+  ].map(r => `<tr><td>${r[0]}</td><td style="text-align:right">${r[1]}</td></tr>`).join('');
+
+  const al = getAlert(d, base.water_km2);
+  const aEl = $('#alert');
+  aEl.className = 'alert' + (al.crit ? ' crit' : '');
+  aEl.innerHTML = `<b>${al.title}</b>${al.text}`;
+}
+
+function render() {
+  if (!S.meta) return;
+  const dates = S.meta.dates;
+  const d = dates[S.i];
+  const base = dates[dates.length - 1];
+  const bounds = S.meta.bounds_wgs84;
+
+  const leftUrl = S.mode === 'rgb' ? base.rgb_png : base.water_png;
+  if (!ovLeft) ovLeft = L.imageOverlay(leftUrl, bounds, { pane: 'pB', opacity: 0.92 }).addTo(map);
+  else ovLeft.setUrl(leftUrl);
+
+  let rightUrl = d.water_png;
+  if (S.mode === 'rgb') rightUrl = d.rgb_png;
+  if (S.mode === 'freq') rightUrl = S.meta.frequency_png;
+
+  if (!ovRight) ovRight = L.imageOverlay(rightUrl, bounds, { pane: 'pA', opacity: 0.92 }).addTo(map);
+  else ovRight.setUrl(rightUrl);
+
+  // Toggle divider & left tag visibility in full-width frequency mode
+  const isFreq = S.mode === 'freq';
+  $('#dv').style.display = isFreq ? 'none' : 'block';
+  $('#tagL').style.display = isFreq ? 'none' : 'flex';
+  $('#guideChip').textContent = isFreq
+    ? 'Full-width 10-date summary · Switch back to "Where water is" to compare dates'
+    : '1. Drag the center line to compare · 2. Pick a date below · 3. Switch the view';
+
+  $('#tagL').innerHTML = S.mode === 'rgb'
+    ? `<i class="sw" style="background:#2E5A44"></i>Oct 14 UTC · Baseline raw radar`
+    : `<i class="sw" style="background:${BLUE}"></i>Oct 14 UTC · Baseline (${base.water_km2.toFixed(0)} km²)`;
+
+  if (S.mode === 'water') {
+    $('#tagR').innerHTML = `<i class="sw" style="background:${BLUE}"></i>${d.label} UTC · Water (${d.water_km2.toFixed(1)} km²)`;
+    $('#legendBar').innerHTML = `<i class="sw" style="background:${BLUE}"></i> <strong>Blue:</strong> Smooth water-like surface (HHHH &lt; −15.5 dB)`;
+  } else if (S.mode === 'rgb') {
+    $('#tagR').innerHTML = `<i class="sw" style="background:#C2410C"></i>${d.label} UTC · Raw radar (R:HH G:HV B:HH−HV)`;
+    $('#legendBar').innerHTML = `<strong>Raw radar colors:</strong> Dark/black = Smooth open water · Yellow-green = Tall grass &amp; forest canopy (high HV) · Pink/bright = Rough ground or double-bounce`;
+  } else {
+    $('#tagR').innerHTML = `<i class="sw" style="background:#0891B2"></i>All 10 Dates · How often each pixel was wet`;
+    $('#legendBar').innerHTML = `<strong>Wetness frequency:</strong> <span style="background:#EDF8B1;padding:0 4px;border:1px solid #999">10–30%</span> Rare flood · <span style="background:#41B6C4;color:#fff;padding:0 4px">40–70%</span> Seasonal floodplain · <span style="background:#081D58;color:#fff;padding:0 4px">80–100%</span> Permanent river/beel`;
+  }
+
+  $('#mWater').classList.toggle('on', S.mode === 'water');
+  $('#mRgb').classList.toggle('on', S.mode === 'rgb');
+  $('#mFreq').classList.toggle('on', S.mode === 'freq');
+  $('#rng').value = S.i;
+
+  [...$('#stops').children].forEach((b, idx) => b.classList.toggle('on', idx === S.i));
+
+  chart.data.datasets[0].pointRadius = dates.map((_, idx) => idx === S.i ? 6 : 3);
+  chart.data.datasets[0].pointBackgroundColor = dates.map((_, idx) => idx === S.i ? SIENNA : BLUE);
+  chart.update('none');
+  updateTable();
+  clip();
+}
+
+// --- Controls ---
+$('#rng').addEventListener('input', e => { S.i = +e.target.value; render(); });
+$('#mWater').onclick = () => { S.mode = 'water'; render(); };
+$('#mRgb').onclick = () => { S.mode = 'rgb'; render(); };
+$('#mFreq').onclick = () => { S.mode = 'freq'; render(); };
+
+$('#rgrid').innerHTML = REGIONS.map(r => `<button data-k="${r.k}">${r.lab}</button>`).join('');
+function region(k) {
+  const r = REGIONS.find(x => x.k === k);
+  S.region = k;
+  [...$('#rgrid').children].forEach(b => b.classList.toggle('on', b.dataset.k === k));
+  $('#rtext').textContent = r.t;
+  map.flyTo(r.c, r.z, { duration: 1.0 });
+}
+$('#rgrid').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b) region(b.dataset.k);
+});
+
+$('#dl').addEventListener('click', () => {
+  if (!S.meta) return;
+  const H = ['date', 'label', 'ist_label', 'description', 'threshold_db', 'water_km2', 'water_low_km2', 'water_high_km2', 'water_pct_box', 'mean_hh_db', 'mean_hv_db'];
+  const rows = S.meta.dates.map(d => H.map(k => `"${String(d[k]).replace(/"/g, '""')}"`).join(','));
+  const blob = new Blob(['\uFEFF' + [H.join(','), ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kaziranga_nisar_2026_water_timeseries.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+async function init() {
+  try {
+    const res = await fetch('data/nisar_metrics.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    S.meta = await res.json();
+
+    studyRect = L.rectangle(S.meta.bounds_wgs84, { className: 'bbox-rect', interactive: false }).addTo(map);
+    map.fitBounds(S.meta.bounds_wgs84, { padding: [24, 24] });
+
+    $('#stops').innerHTML = S.meta.dates.map((d, i) =>
+      `<button data-i="${i}"><b>${d.label}</b><small>${d.water_km2.toFixed(0)} km²</small></button>`
+    ).join('');
+    $('#stops').addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (b) { S.i = +b.dataset.i; render(); }
+    });
+
+    chart.data.labels = S.meta.dates.map(d => d.label);
+    chart.data.datasets[0].data = S.meta.dates.map(d => d.water_km2);
+    chart.data.datasets[1].data = S.meta.dates.map(d => d.water_high_km2);
+    chart.data.datasets[2].data = S.meta.dates.map(d => d.water_low_km2);
+
+    $('#status').textContent = `${S.meta.sensor} · ${S.meta.product_status}`;
+    place();
+    render();
+    region('study');
+  } catch (err) {
+    $('#status').textContent = 'Error loading data/nisar_metrics.json (serve via http, not file://)';
+    console.error(err);
+  }
+}
+
+map.whenReady(() => { place(); init(); });
+setTimeout(() => { map.invalidateSize(); place(); }, 250);
 </script>
 </body>
 </html>
