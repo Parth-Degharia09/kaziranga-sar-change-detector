@@ -34,8 +34,6 @@ Optical satellites are routinely blocked by dense monsoon cloud cover during pea
 
 ## 📊 Key Findings (Cropped Track 040 / Frame 015 window: 2,176.13 km²)
 
-> The table below is generated from `frontend/data/nisar_metrics.json` by `backend/processing/04_update_readme_table.py`. Do not edit it by hand.
-
 <!-- RESULTS_START -->
 | Cycle | Date (UTC) | Local date (IST) | Water-like area (km²) | Extra vs. Oct 14 (km²) | Cutoff check −17.5 → −13.5 dB (km²) | Mean HHHH (dB) | Mean HVHV (dB) | Vegetation radar change (km²) |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
