@@ -20,7 +20,15 @@ jobs:
       - name: Install test dependencies
         run: pip install numpy scipy scikit-image
       - name: Run unit tests
-        run: python The_Larpers/backend/tests/test_sar_utils.py
+        run: |
+          t=$(find . -path ./.git -prune -o -name test_sar_utils.py -print | head -n1)
+          if [ -z "$t" ]; then
+            echo "test_sar_utils.py not found. Files in this repo:"
+            find . -maxdepth 4 -not -path './.git*'
+            exit 1
+          fi
+          echo "Running $t"
+          python "$t"
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -38,8 +46,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Locate frontend folder
+        id: find
+        run: |
+          f=$(find . -path ./.git -prune -o -name index.html -path '*frontend*' -print | head -n1)
+          if [ -z "$f" ]; then
+            echo "frontend/index.html not found. Files in this repo:"
+            find . -maxdepth 4 -not -path './.git*'
+            exit 1
+          fi
+          echo "dir=$(dirname "$f")" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: The_Larpers/frontend
+          path: ${{ steps.find.outputs.dir }}
       - id: deployment
         uses: actions/deploy-pages@v4
