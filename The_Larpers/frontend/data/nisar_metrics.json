@@ -13,18 +13,19 @@
     ]
   ],
   "study_box_km2": 2176.13,
-  "persistent_water_km2": 280.04,
-  "seasonal_water_footprint_km2": 197.37,
-  "hh_water_land_contrast_db": 10.5,
-  "hv_water_land_contrast_db": 8.5,
+  "frequently_water_observed_km2": 280.04,
+  "occasionally_water_observed_km2": 197.37,
+  "hh_core_channel_contrast_db": 10.7,
+  "hv_core_channel_contrast_db": 8.9,
   "jul22_highest_across_all_thresholds": true,
+  "has_imerg_rainfall": true,
   "frequency_png": "data/inundation_frequency.png",
   "dates": [
     {
       "date": "20260616",
       "label": "Jun 16",
       "ist_label": "Jun 17 IST",
-      "description": "Early monsoon onset (Cycle 023)",
+      "description": "Cycle 023 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 297.54,
       "water_low_km2": 99.11,
@@ -36,13 +37,14 @@
       "veg_hv_shift_km2": 122.52,
       "water_png": "data/water_20260616.png",
       "rgb_png": "data/rgb_20260616.png",
-      "veg_png": "data/veg_20260616.png"
+      "veg_png": "data/veg_20260616.png",
+      "rain_12d_mm": 26.7
     },
     {
       "date": "20260628",
       "label": "Jun 28",
       "ist_label": "Jun 29 IST",
-      "description": "Rising river stage (Cycle 024)",
+      "description": "Cycle 024 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 360.45,
       "water_low_km2": 191.45,
@@ -54,13 +56,14 @@
       "veg_hv_shift_km2": 133.63,
       "water_png": "data/water_20260628.png",
       "rgb_png": "data/rgb_20260628.png",
-      "veg_png": "data/veg_20260628.png"
+      "veg_png": "data/veg_20260628.png",
+      "rain_12d_mm": 62.4
     },
     {
       "date": "20260710",
       "label": "Jul 10",
       "ist_label": "Jul 11 IST",
-      "description": "Monsoon water expansion (Cycle 025)",
+      "description": "Cycle 025 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 347.01,
       "water_low_km2": 141.12,
@@ -72,13 +75,14 @@
       "veg_hv_shift_km2": 142.01,
       "water_png": "data/water_20260710.png",
       "rgb_png": "data/rgb_20260710.png",
-      "veg_png": "data/veg_20260710.png"
+      "veg_png": "data/veg_20260710.png",
+      "rain_12d_mm": 75.2
     },
     {
       "date": "20260722",
       "label": "Jul 22",
       "ist_label": "Jul 23 IST",
-      "description": "Highest water extent seen in record (Cycle 026)",
+      "description": "Cycle 026 observation \u2014 highest water-like extent seen in series",
       "threshold_db": -15.5,
       "water_km2": 455.49,
       "water_low_km2": 298.98,
@@ -90,13 +94,14 @@
       "veg_hv_shift_km2": 165.14,
       "water_png": "data/water_20260722.png",
       "rgb_png": "data/rgb_20260722.png",
-      "veg_png": "data/veg_20260722.png"
+      "veg_png": "data/veg_20260722.png",
+      "rain_12d_mm": 105.1
     },
     {
       "date": "20260815",
       "label": "Aug 15",
       "ist_label": "Aug 16 IST",
-      "description": "First pass after Jul 27\u2013Aug 10 track gap (Cycle 028)",
+      "description": "Cycle 028 observation \u2014 first pass after Jul 27\u2013Aug 10 track gap",
       "threshold_db": -15.5,
       "water_km2": 330.37,
       "water_low_km2": 143.64,
@@ -108,13 +113,14 @@
       "veg_hv_shift_km2": 133.65,
       "water_png": "data/water_20260815.png",
       "rgb_png": "data/rgb_20260815.png",
-      "veg_png": "data/veg_20260815.png"
+      "veg_png": "data/veg_20260815.png",
+      "rain_12d_mm": 88.1
     },
     {
       "date": "20260827",
       "label": "Aug 27",
       "ist_label": "Aug 28 IST",
-      "description": "Late monsoon persistence (Cycle 029)",
+      "description": "Cycle 029 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 309.26,
       "water_low_km2": 81.73,
@@ -126,13 +132,14 @@
       "veg_hv_shift_km2": 108.89,
       "water_png": "data/water_20260827.png",
       "rgb_png": "data/rgb_20260827.png",
-      "veg_png": "data/veg_20260827.png"
+      "veg_png": "data/veg_20260827.png",
+      "rain_12d_mm": 53.5
     },
     {
       "date": "20260908",
       "label": "Sep 08",
       "ist_label": "Sep 09 IST",
-      "description": "Gradual water recession (Cycle 030)",
+      "description": "Cycle 030 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 325.21,
       "water_low_km2": 81.05,
@@ -144,13 +151,14 @@
       "veg_hv_shift_km2": 125.62,
       "water_png": "data/water_20260908.png",
       "rgb_png": "data/rgb_20260908.png",
-      "veg_png": "data/veg_20260908.png"
+      "veg_png": "data/veg_20260908.png",
+      "rain_12d_mm": 137.7
     },
     {
       "date": "20260920",
       "label": "Sep 20",
       "ist_label": "Sep 21 IST",
-      "description": "Floodplain draining (Cycle 031)",
+      "description": "Cycle 031 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 309.3,
       "water_low_km2": 43.04,
@@ -162,13 +170,14 @@
       "veg_hv_shift_km2": 80.72,
       "water_png": "data/water_20260920.png",
       "rgb_png": "data/rgb_20260920.png",
-      "veg_png": "data/veg_20260920.png"
+      "veg_png": "data/veg_20260920.png",
+      "rain_12d_mm": 75.9
     },
     {
       "date": "20261002",
       "label": "Oct 02",
       "ist_label": "Oct 03 IST",
-      "description": "Post-monsoon transition (Cycle 032)",
+      "description": "Cycle 032 observation (Track 040 / Frame 015)",
       "threshold_db": -15.5,
       "water_km2": 277.51,
       "water_low_km2": 138.06,
@@ -180,13 +189,14 @@
       "veg_hv_shift_km2": 21.36,
       "water_png": "data/water_20261002.png",
       "rgb_png": "data/rgb_20261002.png",
-      "veg_png": "data/veg_20261002.png"
+      "veg_png": "data/veg_20261002.png",
+      "rain_12d_mm": 77.7
     },
     {
       "date": "20261014",
       "label": "Oct 14",
       "ist_label": "Oct 15 IST",
-      "description": "Low-water baseline (Cycle 033)",
+      "description": "Cycle 033 observation \u2014 lowest water-like extent (reference baseline)",
       "threshold_db": -15.5,
       "water_km2": 235.92,
       "water_low_km2": 136.55,
@@ -198,7 +208,8 @@
       "veg_hv_shift_km2": 0.0,
       "water_png": "data/water_20261014.png",
       "rgb_png": "data/rgb_20261014.png",
-      "veg_png": "data/veg_20261014.png"
+      "veg_png": "data/veg_20261014.png",
+      "rain_12d_mm": 37.1
     }
   ]
 }
