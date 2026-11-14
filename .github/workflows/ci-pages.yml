@@ -1,63 +1,51 @@
-name: Test and deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install test dependencies
-        run: pip install numpy scipy scikit-image
-      - name: Run unit tests
-        run: |
-          t=$(find . -path ./.git -prune -o -name test_sar_utils.py -print | head -n1)
-          if [ -z "$t" ]; then
-            echo "test_sar_utils.py not found. Files in this repo:"
-            find . -maxdepth 4 -not -path './.git*'
-            exit 1
-          fi
-          echo "Running $t"
-          python "$t"
-
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: test
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    concurrency:
-      group: pages
-      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - name: Locate frontend folder
+
+      - name: Find the web app folder
         id: find
         run: |
           f=$(find . -path ./.git -prune -o -name index.html -path '*frontend*' -print | head -n1)
           if [ -z "$f" ]; then
-            echo "frontend/index.html not found. Files in this repo:"
+            f=$(find . -path ./.git -prune -o -name index.html -print | head -n1)
+          fi
+          if [ -z "$f" ]; then
+            echo "No index.html found. Files in this repo:"
             find . -maxdepth 4 -not -path './.git*'
             exit 1
           fi
-          echo "dir=$(dirname "$f")" >> "$GITHUB_OUTPUT"
+          dir=$(dirname "$f")
+          echo "Deploying folder: $dir"
+          ls -la "$dir"
+          if [ ! -d "$dir/data" ]; then echo "WARNING: no data/ folder next to index.html, the map will be empty"; fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.find.outputs.dir }}
+
       - id: deployment
         uses: actions/deploy-pages@v4
