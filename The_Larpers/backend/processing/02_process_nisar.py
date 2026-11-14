@@ -22,7 +22,7 @@ DATES = [
     ("20260628", "Jun 28", "Jun 29 IST", "Rising river stage (Cycle 024)"),
     ("20260710", "Jul 10", "Jul 11 IST", "Monsoon water expansion (Cycle 025)"),
     ("20260722", "Jul 22", "Jul 23 IST", "Highest water extent seen in record (Cycle 026)"),
-    ("20260815", "Aug 15", "Aug 16 IST", "First pass after Jul 27–Aug 10 instrument gap (Cycle 028)"),
+    ("20260815", "Aug 15", "Aug 16 IST", "First pass after Jul 27–Aug 10 track gap (Cycle 028)"),
     ("20260827", "Aug 27", "Aug 28 IST", "Late monsoon persistence (Cycle 029)"),
     ("20260908", "Sep 08", "Sep 09 IST", "Gradual water recession (Cycle 030)"),
     ("20260920", "Sep 20", "Sep 21 IST", "Floodplain draining (Cycle 031)"),
@@ -64,6 +64,13 @@ def classify_water(hh_db, thresh_db):
     return mask
 
 
+def clean_small(mask):
+    try:
+        return remove_small_objects(mask, max_size=MIN_PATCH_PIXELS - 1)
+    except TypeError:
+        return remove_small_objects(mask, min_size=MIN_PATCH_PIXELS)
+
+
 def reproject_to_3857(arr, src_transform, src_crs, dst_width, resampling=Resampling.nearest):
     dst_crs = "EPSG:3857"
     left, bottom, right, top = transform_bounds(
@@ -99,6 +106,12 @@ def main():
     wgs84_bounds = None
     hist_samples = {}
 
+    # Load Oct 14 baseline first so we can compute HH & HV change for Vegetation Response
+    with rasterio.open(TIF_DIR / "kaziranga_20261014_HHHH.tif") as s_hh, \
+         rasterio.open(TIF_DIR / "kaziranga_20261014_HVHV.tif") as s_hv:
+        base_hh_db = to_db(s_hh.read(1), s_hh.nodata)
+        base_hv_db = to_db(s_hv.read(1), s_hv.nodata)
+
     for date_str, label, ist_label, desc in DATES:
         hh_path = TIF_DIR / f"kaziranga_{date_str}_HHHH.tif"
         hv_path = TIF_DIR / f"kaziranga_{date_str}_HVHV.tif"
@@ -121,13 +134,8 @@ def main():
         water_high = classify_water(hh_db, FIXED_THRESH_DB + 2.0)
 
         land_mask = np.isfinite(hh_db) & (~water_mid)
-        hh_water_med = float(np.nanmedian(hh_db[water_mid]))
-        hh_land_med = float(np.nanmedian(hh_db[land_mask]))
-        hv_water_med = float(np.nanmedian(hv_db[water_mid]))
-        hv_land_med = float(np.nanmedian(hv_db[land_mask]))
-
-        hh_contrasts.append(hh_land_med - hh_water_med)
-        hv_contrasts.append(hv_land_med - hv_water_med)
+        hh_contrasts.append(float(np.nanmedian(hh_db[land_mask]) - np.nanmedian(hh_db[water_mid])))
+        hv_contrasts.append(float(np.nanmedian(hv_db[land_mask]) - np.nanmedian(hv_db[water_mid])))
 
         area_mid = float(water_mid.sum() * PIXEL_AREA_KM2)
         area_low = float(water_low.sum() * PIXEL_AREA_KM2)
@@ -135,13 +143,13 @@ def main():
 
         water_stack.append(water_mid.astype(np.uint8))
 
-        # Water Mask PNG
+        # 1. Water Mask PNG
         w_3857 = reproject_to_3857(water_mid.astype(np.uint8), src_transform, src_crs, EXPORT_WIDTH, Resampling.nearest)
         rgba_water = np.zeros((w_3857.shape[0], w_3857.shape[1], 4), dtype=np.uint8)
         rgba_water[w_3857 == 1] = [29, 78, 216, 195]
         save_rgba_png(rgba_water, OUT_DIR / f"water_{date_str}.png")
 
-        # Dual-Pol False-Color RGB (R=HH, G=HV, B=HH-HV)
+        # 2. Dual-Pol False-Color RGB (R=HH, G=HV, B=HH-HV)
         hh_clean = np.nan_to_num(hh_db, nan=-22.0)
         hv_clean = np.nan_to_num(hv_db, nan=-28.0)
         r_norm = np.clip((hh_clean - (-22.0)) / (-4.0 - (-22.0)), 0, 1)
@@ -153,6 +161,28 @@ def main():
         alpha = np.full((rgb_3857.shape[1], rgb_3857.shape[2], 1), 235, dtype=np.uint8)
         rgba_rgb = np.concatenate([np.transpose(rgb_3857, (1, 2, 0)), alpha], axis=2)
         save_rgba_png(rgba_rgb, OUT_DIR / f"rgb_{date_str}.png")
+
+        # 3. Vegetation / Canopy Radar Response Change vs Oct 14 (non-open-water land pixels)
+        # Class 1 (Amber): Elevated HH (+2.5 dB over Oct 14) on vegetated land -> possible sub-canopy double-bounce
+        # Class 2 (Violet): Strong HV shift (|dHV| > 2.5 dB) -> vegetation structure/moisture change
+        d_hh = hh_db - base_hh_db
+        d_hv = hv_db - base_hv_db
+        veg_domain = land_mask & (base_hv_db > -20.0)  # Vegetated/rough land in baseline
+        double_bounce_cand = clean_small(veg_domain & (d_hh > 2.5) & (d_hh > d_hv + 1.0))
+        hv_shift_cand = clean_small(veg_domain & (~double_bounce_cand) & (np.abs(d_hv) > 2.5))
+
+        veg_code = np.zeros(hh_db.shape, dtype=np.uint8)
+        veg_code[hv_shift_cand] = 2
+        veg_code[double_bounce_cand] = 1
+
+        veg_db_km2 = round(float(double_bounce_cand.sum() * PIXEL_AREA_KM2), 2)
+        veg_hv_km2 = round(float(hv_shift_cand.sum() * PIXEL_AREA_KM2), 2)
+
+        v_3857 = reproject_to_3857(veg_code, src_transform, src_crs, EXPORT_WIDTH, Resampling.nearest)
+        rgba_veg = np.zeros((v_3857.shape[0], v_3857.shape[1], 4), dtype=np.uint8)
+        rgba_veg[v_3857 == 1] = [217, 119, 6, 200]    # Amber: elevated HH double-bounce signature
+        rgba_veg[v_3857 == 2] = [124, 58, 237, 175]   # Violet: HV canopy structure/moisture shift
+        save_rgba_png(rgba_veg, OUT_DIR / f"veg_{date_str}.png")
 
         records.append({
             "date": date_str,
@@ -166,17 +196,18 @@ def main():
             "water_pct_box": round(100.0 * area_mid / (hh_db.size * PIXEL_AREA_KM2), 1),
             "mean_hh_db": round(float(np.nanmean(hh_db)), 2),
             "mean_hv_db": round(float(np.nanmean(hv_db)), 2),
+            "veg_double_bounce_km2": veg_db_km2,
+            "veg_hv_shift_km2": veg_hv_km2,
             "water_png": f"data/water_{date_str}.png",
             "rgb_png": f"data/rgb_{date_str}.png",
+            "veg_png": f"data/veg_{date_str}.png",
         })
 
-    # Robustness check across all 3 thresholds
     max_mid = max(records, key=lambda r: r["water_km2"])["date"]
     max_low = max(records, key=lambda r: r["water_low_km2"])["date"]
     max_high = max(records, key=lambda r: r["water_high_km2"])["date"]
     jul22_stays_highest = (max_mid == max_low == max_high == "20260722")
 
-    # 10-Date Frequency Map
     stack_arr = np.stack(water_stack, axis=0)
     freq = stack_arr.sum(axis=0).astype(np.float32) / len(DATES)
     perm_km2 = round(float((freq >= 0.80).sum() * PIXEL_AREA_KM2), 2)
@@ -189,7 +220,6 @@ def main():
     rgba_freq[..., 3] = np.where(freq_3857 > 0.05, 215, 0)
     save_rgba_png(rgba_freq, OUT_DIR / "inundation_frequency.png")
 
-    # Save Histogram Justification Figure
     plt.figure(figsize=(8, 4), dpi=150)
     plt.hist(hist_samples["Oct 14"], bins=120, range=(-26, -2), density=True, alpha=0.55, color="#0F2942", label="Oct 14 (Low-water baseline)")
     plt.hist(hist_samples["Jul 22"], bins=120, range=(-26, -2), density=True, alpha=0.55, color="#1D4ED8", label="Jul 22 (Highest water seen)")
@@ -209,8 +239,8 @@ def main():
         "crs_native": str(src_crs),
         "bounds_wgs84": wgs84_bounds,
         "study_box_km2": total_box_km2,
-        "permanent_water_km2": perm_km2,
-        "seasonal_flood_footprint_km2": seasonal_km2,
+        "persistent_water_km2": perm_km2,
+        "seasonal_water_footprint_km2": seasonal_km2,
         "hh_water_land_contrast_db": round(float(np.mean(hh_contrasts)), 1),
         "hv_water_land_contrast_db": round(float(np.mean(hv_contrasts)), 1),
         "jul22_highest_across_all_thresholds": jul22_stays_highest,
@@ -221,10 +251,7 @@ def main():
     with open(OUT_DIR / "nisar_metrics.json", "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
-    print(f"HH water-vs-land separation: {summary['hh_water_land_contrast_db']} dB | "
-          f"HV separation: {summary['hv_water_land_contrast_db']} dB")
-    print(f"Jul 22 stays highest across -17.5, -15.5, and -13.5 dB? -> {jul22_stays_highest}")
-    print("Saved docs/hh_histogram.png and updated frontend/data/nisar_metrics.json.")
+    print("Done! Exported vegetation response layers + updated nisar_metrics.json.")
 
 
 if __name__ == "__main__":

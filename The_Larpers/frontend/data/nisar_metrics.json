@@ -13,8 +13,8 @@
     ]
   ],
   "study_box_km2": 2176.13,
-  "permanent_water_km2": 280.04,
-  "seasonal_flood_footprint_km2": 197.37,
+  "persistent_water_km2": 280.04,
+  "seasonal_water_footprint_km2": 197.37,
   "hh_water_land_contrast_db": 10.5,
   "hv_water_land_contrast_db": 8.5,
   "jul22_highest_across_all_thresholds": true,
@@ -32,8 +32,11 @@
       "water_pct_box": 13.7,
       "mean_hh_db": -9.2,
       "mean_hv_db": -15.37,
+      "veg_double_bounce_km2": 3.83,
+      "veg_hv_shift_km2": 122.52,
       "water_png": "data/water_20260616.png",
-      "rgb_png": "data/rgb_20260616.png"
+      "rgb_png": "data/rgb_20260616.png",
+      "veg_png": "data/veg_20260616.png"
     },
     {
       "date": "20260628",
@@ -47,8 +50,11 @@
       "water_pct_box": 16.6,
       "mean_hh_db": -9.38,
       "mean_hv_db": -15.49,
+      "veg_double_bounce_km2": 4.41,
+      "veg_hv_shift_km2": 133.63,
       "water_png": "data/water_20260628.png",
-      "rgb_png": "data/rgb_20260628.png"
+      "rgb_png": "data/rgb_20260628.png",
+      "veg_png": "data/veg_20260628.png"
     },
     {
       "date": "20260710",
@@ -62,8 +68,11 @@
       "water_pct_box": 15.9,
       "mean_hh_db": -9.43,
       "mean_hv_db": -15.58,
+      "veg_double_bounce_km2": 4.17,
+      "veg_hv_shift_km2": 142.01,
       "water_png": "data/water_20260710.png",
-      "rgb_png": "data/rgb_20260710.png"
+      "rgb_png": "data/rgb_20260710.png",
+      "veg_png": "data/veg_20260710.png"
     },
     {
       "date": "20260722",
@@ -77,14 +86,17 @@
       "water_pct_box": 20.9,
       "mean_hh_db": -9.62,
       "mean_hv_db": -15.65,
+      "veg_double_bounce_km2": 9.64,
+      "veg_hv_shift_km2": 165.14,
       "water_png": "data/water_20260722.png",
-      "rgb_png": "data/rgb_20260722.png"
+      "rgb_png": "data/rgb_20260722.png",
+      "veg_png": "data/veg_20260722.png"
     },
     {
       "date": "20260815",
       "label": "Aug 15",
       "ist_label": "Aug 16 IST",
-      "description": "First pass after Jul 27\u2013Aug 10 instrument gap (Cycle 028)",
+      "description": "First pass after Jul 27\u2013Aug 10 track gap (Cycle 028)",
       "threshold_db": -15.5,
       "water_km2": 330.37,
       "water_low_km2": 143.64,
@@ -92,8 +104,11 @@
       "water_pct_box": 15.2,
       "mean_hh_db": -8.97,
       "mean_hv_db": -15.16,
+      "veg_double_bounce_km2": 8.12,
+      "veg_hv_shift_km2": 133.65,
       "water_png": "data/water_20260815.png",
-      "rgb_png": "data/rgb_20260815.png"
+      "rgb_png": "data/rgb_20260815.png",
+      "veg_png": "data/veg_20260815.png"
     },
     {
       "date": "20260827",
@@ -107,8 +122,11 @@
       "water_pct_box": 14.2,
       "mean_hh_db": -8.87,
       "mean_hv_db": -15.22,
+      "veg_double_bounce_km2": 3.04,
+      "veg_hv_shift_km2": 108.89,
       "water_png": "data/water_20260827.png",
-      "rgb_png": "data/rgb_20260827.png"
+      "rgb_png": "data/rgb_20260827.png",
+      "veg_png": "data/veg_20260827.png"
     },
     {
       "date": "20260908",
@@ -122,8 +140,11 @@
       "water_pct_box": 14.9,
       "mean_hh_db": -8.74,
       "mean_hv_db": -15.19,
+      "veg_double_bounce_km2": 3.7,
+      "veg_hv_shift_km2": 125.62,
       "water_png": "data/water_20260908.png",
-      "rgb_png": "data/rgb_20260908.png"
+      "rgb_png": "data/rgb_20260908.png",
+      "veg_png": "data/veg_20260908.png"
     },
     {
       "date": "20260920",
@@ -137,8 +158,11 @@
       "water_pct_box": 14.2,
       "mean_hh_db": -8.47,
       "mean_hv_db": -14.93,
+      "veg_double_bounce_km2": 4.99,
+      "veg_hv_shift_km2": 80.72,
       "water_png": "data/water_20260920.png",
-      "rgb_png": "data/rgb_20260920.png"
+      "rgb_png": "data/rgb_20260920.png",
+      "veg_png": "data/veg_20260920.png"
     },
     {
       "date": "20261002",
@@ -152,8 +176,11 @@
       "water_pct_box": 12.8,
       "mean_hh_db": -8.48,
       "mean_hv_db": -14.94,
+      "veg_double_bounce_km2": 2.06,
+      "veg_hv_shift_km2": 21.36,
       "water_png": "data/water_20261002.png",
-      "rgb_png": "data/rgb_20261002.png"
+      "rgb_png": "data/rgb_20261002.png",
+      "veg_png": "data/veg_20261002.png"
     },
     {
       "date": "20261014",
@@ -167,8 +194,11 @@
       "water_pct_box": 10.8,
       "mean_hh_db": -8.36,
       "mean_hv_db": -14.76,
+      "veg_double_bounce_km2": 0.0,
+      "veg_hv_shift_km2": 0.0,
       "water_png": "data/water_20261014.png",
-      "rgb_png": "data/rgb_20261014.png"
+      "rgb_png": "data/rgb_20261014.png",
+      "veg_png": "data/veg_20261014.png"
     }
   ]
 }
