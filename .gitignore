@@ -1,0 +1,5 @@
+data/raw_tifs/
+*.tif
+*.h5
+
+.venv/
