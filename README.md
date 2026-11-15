@@ -2,7 +2,7 @@
 
 Exploring seasonal surface-water dynamics and L-band vegetation backscatter shifts across the Brahmaputra–Kaziranga floodplain using NASA-ISRO NISAR radar.
 
-Built for the NASA Space Apps Challenge 2026, *Dancing with the SARs*, by Team The Larpers.
+Built for the NASA Space Apps Challenge 2026, *Dancing with the SARs*, by Team The_Larpers.
 
 **Live demo: https://parth-degharia09.github.io/kaziranga-sar-change-detector/**
 
@@ -155,4 +155,3 @@ kaziranga-sar-change-detector/
 
 See [LICENSE](LICENSE).
 
-Team - The_Larpers
