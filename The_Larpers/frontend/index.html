@@ -45,7 +45,6 @@ summary::-webkit-details-marker{display:none}
 summary::before{content:'+ ';}details[open] summary::before{content:'\2212 ';}
 details p, details ul{font-size:13px;line-height:1.5;margin:0 0 9px}
 details ul{padding-left:18px}
-details a{color:var(--blue);text-decoration:underline}
 .foot{color:var(--mute);margin-top:12px;line-height:1.55;text-transform:none;letter-spacing:0;font-size:10.5px}
 #map{background:var(--paper)}
 .ov{position:absolute;top:0;left:0;right:0;z-index:1000;display:flex;flex-direction:column;gap:6px;padding:12px;pointer-events:none}
@@ -109,9 +108,9 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--ink)
     <table>
       <tbody id="advBody"></tbody>
     </table>
-    <p style="margin-top:8px"><strong>Grid &amp; calibration check:</strong> All 20 GeoTIFFs share an identical <code>3119 × 6977</code> grid in <code>EPSG:32646</code> (10 m pixels) calibrated to terrain-corrected linear backscatter power (gamma-nought), converted to dB after 50 m (5 × 5 pixel) spatial speckle averaging.</p>
-    <p><strong>Experimental vegetation radar change rule:</strong> Measured over non-water vegetated land (<code>HVHV &gt; −20 dB</code> in Oct 14) as the disjoint union of patches at least 2,500 m² with either <strong>Increased HH</strong> (ΔHH &gt; +2.5 dB and ΔHH &gt; ΔHV + 1.0 dB) or <strong>Changed HV</strong> (|ΔHV| &gt; 2.5 dB).</p>
-    <p id="polNote"></p>
+    <p style="margin-top:8px"><strong>Grid &amp; calibration check:</strong> All 20 GeoTIFFs share an identical <code>3119 × 6977</code> grid in <code>EPSG:32646</code> (10 m pixels) calibrated to terrain-corrected linear backscatter power ($\gamma^0$), converted to dB after 50 m spatial speckle averaging.</p>
+    <p><strong>Vegetation radar change definition:</strong> Measured over non-water vegetated land (<code>HVHV &gt; −20 dB</code> in Oct 14) as the disjoint union of patches $\ge 2,500\text{ m}^2$ with either <strong>Increased HH</strong> ($\Delta\text{HH} &gt; +2.5\text{ dB}$ and $\Delta\text{HH} &gt; \Delta\text{HV} + 1.0\text{ dB}$) or <strong>Changed HV</strong> ($|\Delta\text{HV}| &gt; 2.5\text{ dB}$).</p>
+    <p><strong>Why HH over HV for water?</strong> Across all 10 dates, HHHH separates smooth water from land by <strong>10.5 dB</strong> on average vs. <strong>8.5 dB</strong> for HVHV.</p>
   </details>
 
   <div class="dl-row">
@@ -120,35 +119,107 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--ink)
   </div>
   <div class="foot">Data source: <span id="status">Loading NISAR L2 GCOV metrics...</span></div>
 
-  <span class="lab" id="chartTitle">Total water-like area &amp; threshold sensitivity (km²)</span>
-  <div style="height:185px"><canvas id="chart"></canvas></div>
-  <details class="top-rule" open>
-  <summary>What was happening (2026 ground context)</summary>
+  <span class="lab">Total water-like area &amp; threshold sensitivity (km²)</span>
+  <div style="height:180px"><canvas id="chart"></canvas></div>
+
+<!-- ===================== ASSAM FLOODS AT A GLANCE ===================== -->
+<section class="facts" aria-labelledby="factsTitle">
+<style>
+.facts{margin-top:18px}
+.facts .lab{margin-top:0}
+.facts .lede{font-size:13px;line-height:1.5;margin:0 0 11px;color:#27272A}
+.facts a{color:var(--sienna);text-underline-offset:2px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.fact{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:11px 10px 9px;display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--paper)}
+.fact .n{font-family:'Lora',Georgia,serif;font-weight:700;font-size:25px;line-height:1.05;color:var(--prus);letter-spacing:-.01em}
+.fact .n small{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;color:var(--mute);letter-spacing:.02em;margin-left:2px}
+.fact.hot{background:#EFECE4}
+.fact.hot .n{color:var(--sienna)}
+.fact p{margin:0;font-size:12px;line-height:1.42;color:#27272A}
+.fact .src{font:500 9.5px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;margin-top:auto;padding-top:5px}
+.fact .src:hover{text-decoration:underline}
+.tie{border-left:3px solid var(--sienna);padding:2px 0 2px 11px;margin:14px 0 0}
+.tie b{display:block;font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--sienna);margin-bottom:4px}
+.tie ul{margin:0;padding-left:16px;font-size:12.5px;line-height:1.5}
+.tie li{margin:0 0 5px}
+.facts .foot{margin-top:10px}
+@media (max-width:340px){.fgrid{grid-template-columns:1fr}}
+</style>
+
+<span class="lab" id="factsTitle">Assam floods at a glance</span>
+<p class="lede">Most years, Assam&rsquo;s flood-prone areas are hit by <strong>three to four waves of flooding</strong> (<a href="https://waterresources.assam.gov.in/taxonomy/term/5680" target="_blank" rel="noopener">Assam Water Resources Dept.</a>). Floods are a hazard for people and, in measure, part of how Kaziranga works. Key facts behind this map:</p>
+
+<div class="fgrid">
+  <div class="fact hot">
+    <div class="n">39.6%</div>
+    <p>of Assam&rsquo;s land is flood-prone (31.05 of 78.52 lakh ha), about four times India&rsquo;s overall share of ~10.2%.</p>
+    <a class="src" href="https://waterresources.assam.gov.in/taxonomy/term/5680" target="_blank" rel="noopener">Assam WRD &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">4.27<small>lakh ha</small></div>
+    <p>of land (7.4% of the state) eroded away by the Brahmaputra and its tributaries since 1950.</p>
+    <a class="src" href="https://waterresources.assam.gov.in/taxonomy/term/5680" target="_blank" rel="noopener">Assam WRD &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">+25%</div>
+    <p>growth in the Brahmaputra&rsquo;s area in Assam: 4,850 km&sup2; (1963&ndash;75 survey) to 6,080 km&sup2; (2006). Up to 15 km wider in places.</p>
+    <a class="src" href="https://www.easternmirrornagaland.com/assam-flood-barpeta-village-faces-uncertain-future" target="_blank" rel="noopener">Eastern Mirror &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">#2</div>
+    <p>in the world for sediment load (about 1 billion tonnes a year), and 4th for discharge at its mouth.</p>
+    <a class="src" href="https://doi.org/10.1007/978-94-017-8029-2_16" target="_blank" rel="noopener">Springer chapter &#8599;</a>
+  </div>
+  <div class="fact hot">
+    <div class="n">~90%</div>
+    <p>of Kaziranga was under water within a couple of days in the 2017 floods, submerging most existing highlands.</p>
+    <a class="src" href="https://nenow.in/north-east-news/testing-times-for-kaziranga.html" target="_blank" rel="noopener">NE Now &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">559</div>
+    <p>animals died in Kaziranga&rsquo;s 2012 floods, including 14 rhinos (Assam Forest Dept.). A central report counted 595, including 17 rhinos.</p>
+    <a class="src" href="https://nenow.in/north-east-news/testing-times-for-kaziranga.html" target="_blank" rel="noopener">NE Now &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">144</div>
+    <p>artificial highlands, 12&ndash;16 ft tall, built inside the park as flood refuges (count as of 2020).</p>
+    <a class="src" href="https://www.deccanherald.com/india/assam-flood-or-no-flood-kazirangas-concern-is-equal-867144.html" target="_blank" rel="noopener">Deccan Herald &#8599;</a>
+  </div>
+  <div class="fact">
+    <div class="n">2,613</div>
+    <p>one-horned rhinos counted in Kaziranga in the 2022 census, up from 2,413 in 2018.</p>
+    <a class="src" href="https://www.villagesquare.in/assam-rhinos-in-safe-hands-assams-successful-rhino-conservation-efforts/" target="_blank" rel="noopener">Village Square &#8599;</a>
+  </div>
+</div>
+
+<div class="tie">
+  <b>How this connects to the radar map</b>
   <ul>
-    <li><strong>19 Jul 2026 (Upstream trigger):</strong> Heavy cloudburst/rainfall in Mon District (Nagaland) triggered flash flooding across Upper Assam tributaries (<a href="https://www.indiatodayne.in/opinion/story/when-upper-assam-flooded-differently-1435551-2026-08-09" target="_blank" rel="noopener">reported by India Today NE</a>).</li>
-    <li><strong>21 Jul 2026 (Inside Kaziranga):</strong> Park authorities reported no flood emergency, with only 4 of 233+ forest camps inundated (<a href="https://assamtribune.com/assam/no-flood-situation-in-kaziranga-only-4-forest-camps-inundated-dfo-vignesh-1614548" target="_blank" rel="noopener">reported by The Assam Tribune</a>).</li>
-    <li><strong>22–23 Jul 2026 (River gauge vs. NISAR):</strong> The Brahmaputra flowed above the danger mark upstream at Neamatighat (Jorhat), coinciding with our highest NISAR water-like area (455.5 km²).</li>
-    <li><strong>26 Aug 2026 (Low-flood paradox):</strong> Conservationists and officials noted unusually low park-wide inundation across Kaziranga in 2026 (<a href="https://assamtribune.com/kazirangas-flood-paradox-it-needs-the-floods-assam-fears-but-only-in-measure" target="_blank" rel="noopener">reported by The Assam Tribune</a>).</li>
+    <li><strong>Timing fits.</strong> The Brahmaputra&rsquo;s mean monthly flow is highest in July (about 19% of the annual total, <a href="https://doi.org/10.1007/978-94-017-8029-2_16" target="_blank" rel="noopener">Springer</a>), which is consistent with the Jul 22 peak in water-like area seen by NISAR.</li>
+    <li><strong>Radar sees through monsoon cloud.</strong> L-band radar sends its own signal, so it can map water when optical satellites see only cloud.</li>
+    <li><strong>Beels show up as dark patches.</strong> Assam has more than 3,000 wetlands that hold floodwater (<a href="https://radianceweekly.net/flood-in-assam-causes-and-remedies" target="_blank" rel="noopener">Radiance Weekly</a>); smooth water looks dark to radar.</li>
+    <li><strong>Not every flood is a disaster.</strong> Conservationists argue Kaziranga <a href="https://assamtribune.com/kazirangas-flood-paradox-it-needs-the-floods-assam-fears-but-only-in-measure" target="_blank" rel="noopener">needs its floods, but only in measure</a>.</li>
   </ul>
-  <p><strong>Cutoff evidence:</strong> <a href="../docs/hh_histogram.png" target="_blank" rel="noopener">View HHHH backscatter histogram (−15.5 dB cutoff)</a>.</p>
-  <p><strong>Rainfall note &amp; credit:</strong> 12-day precipitation is area-averaged over our study box (<code>92.95°E–93.65°E, 26.50°N–26.78°N</code>) from NASA GPM IMERG Late Run v07 (<code>GPM_3IMERGDL</code>, Huffman et al., 2023) via NASA Giovanni; upstream Nagaland/Upper Assam catchment rain also drives Brahmaputra river stage.</p>
-</details>
+</div>
+<div class="foot">Facts are compiled from the sources linked above. They are published figures and estimates, not measurements made by this project.</div>
+</section>
+<!-- =================== END ASSAM FLOODS AT A GLANCE =================== -->
 
   <details class="top-rule">
     <summary>How to read this &amp; scientific limits</summary>
-    <p><strong>1. Ecological context (Kaziranga 2026):</strong> Seasonal inundation is vital for Kaziranga's grasslands and wetlands. On 21 July 2026—about a day and a half before our Jul 22 UTC image—park authorities reported <a href="https://assamtribune.com/assam/no-flood-situation-in-kaziranga-only-4-forest-camps-inundated-dfo-vignesh-1614548" target="_blank" rel="noopener">no flood situation in Kaziranga, with only 4 forest camps inundated</a>. This observatory tracks <em>surface-water dynamics</em> rather than claiming a flood disaster.</p>
-    <p><strong>2. Water-like vs. confirmed flood:</strong> Smooth surfaces act like a mirror to L-band radar (&lt; −15.5 dB in HHHH). Permanent river channels, wetlands (<em>beels</em>), flooded paddies, smooth wet mudflats, and <strong>dry smooth river sandbars</strong> can all share this low-backscatter signature. Switch to the <em>Satellite</em> basemap to inspect exposed sandbars.</p>
-    <p><strong>3. Experimental vegetation layer caution:</strong> Radar backscatter over grass and forest shifts with seasonal plant growth, canopy structure, moisture, and surface-water interactions. These exploratory thresholds indicate possible radar changes, not confirmed vegetation damage.</p>
+    <p><strong>1. Ecological context (Kaziranga 2026):</strong> Seasonal inundation is vital for Kaziranga's grasslands and wetlands. On 21 July 2026 (one day before our Jul 22 image), park officials reported normal seasonal wetting with only 4 forest camps inundated and no flood emergency—so this observatory tracks <em>surface-water dynamics</em> rather than claiming a flood disaster.</p>
+    <p><strong>2. Water-like vs. confirmed flood:</strong> Calm water acts like a mirror to L-band radar (&lt; −15.5 dB in HHHH). River channels, wetlands (<em>beels</em>), flooded paddies, and smooth wet mudflats all share this dark signature.</p>
+    <p><strong>3. Vegetation radar change caution:</strong> Radar backscatter over grass and forest shifts with structure, moisture, and surface-water interactions. These observations indicate possible radar changes, not confirmed vegetation damage.</p>
     <p><strong>4. Missing Track 040/Frame 015 interval:</strong> No matching NISAR observation is available for this track between <strong>27 July and 10 August 2026</strong>, so higher water could have occurred during that interval.</p>
   </details>
 
   <details>
     <summary>Future uses</summary>
     <ul>
-      <li>1. Clip directly to official Kaziranga National Park boundary polygons to compute exact inside-park inundation percentages.</li>
-      <li>2. Extend the reproducible Python pipeline to other dynamic river basins such as Bihar's Koshi floodplain once comparable NISAR tracks are acquired.</li>
-      <li>3. Add an upstream Upper Assam / Nagaland IMERG catchment series and CWC river gauge levels to separate local rain from upstream river surges.</li>
-      <li>4. Combine L-band HH/HV double-bounce ratios with elevation (DEM) to map standing water beneath tall grass and forest canopy.</li>
+      <li>Clip directly to official Kaziranga National Park boundary polygons to compute exact inside-park inundation percentages.</li>
+      <li>Extend the reproducible Python pipeline to other dynamic river basins such as Bihar's Koshi floodplain once comparable NISAR tracks are acquired.</li>
+      <li>Pair NISAR 12-day passes with daily NASA GPM IMERG rainfall and Central Water Commission (CWC) river gauge levels.</li>
+      <li>Combine L-band HH/HV double-bounce ratios with elevation (DEM) to map standing water beneath tall grass and forest canopy.</li>
     </ul>
   </details>
 </aside>
@@ -164,7 +235,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;background:var(--ink)
           <button id="mWater" class="on">Where water is</button>
           <button id="mRgb">Raw radar view</button>
           <button id="mFreq">How often wet</button>
-          <button id="mVeg">Vegetation (experimental)</button>
+          <button id="mVeg">Vegetation radar change</button>
         </div>
         <div class="tag" id="tagR"></div>
       </div>
@@ -191,9 +262,9 @@ const SIENNA = '#C2410C', PRUS = '#0F2942', BLUE = '#1D4ED8';
 
 const REGIONS = [
   { k: 'study', lab: 'Full Study Box (2,176 km²)', c: [26.64, 93.30], z: 10, t: 'Cropped Track 040 Frame 015 window (31.2 km × 69.8 km) spanning the Brahmaputra channel and Kaziranga floodplain.' },
-  { k: 'central', lab: 'Central Kaziranga & Beels', c: [26.63, 93.38], z: 12, t: 'Core floodplain grasslands and wetlands (beels). Switch to "Vegetation (experimental)" or "Satellite" to inspect backscatter shifts.' },
-  { k: 'braid', lab: 'Brahmaputra Braided Belt', c: [26.71, 93.48], z: 12, t: 'Multi-channel river belt. Comparing Oct 14 (left) with Jul 22 (right) highlights widening dark water-like channels at higher river stage.' },
-  { k: 'west', lab: 'Western Floodplain Sector', c: [26.58, 93.08], z: 12, t: 'Western floodplain sector where seasonal water-like signatures expand south of the main channel during mid-monsoon passes.' }
+  { k: 'central', lab: 'Central Kaziranga & Beels', c: [26.63, 93.38], z: 12, t: 'Core floodplain grasslands and wetlands (beels). Switch to "Vegetation radar change" or "Satellite" to inspect tall-grass backscatter shifts.' },
+  { k: 'braid', lab: 'Brahmaputra Braided Belt', c: [26.71, 93.48], z: 12, t: 'Multi-channel river belt. Comparing Oct 14 (left) with Jul 22 (right) shows mid-channel bars appearing submerged at higher river stage.' },
+  { k: 'west', lab: 'Western Floodplain Sector', c: [26.58, 93.08], z: 12, t: 'Western floodplain corridor near Jakhalabandha where seasonal backwater spreads across low-lying grasslands and adjacent fields.' }
 ];
 
 const $=s=>document.querySelector(s);
@@ -274,9 +345,9 @@ const chart = new Chart($('#chart'), {
   data: {
     labels: [],
     datasets: [
-      { label: 'Total water-like area (km²)', data: [], borderColor: BLUE, borderWidth: 2, tension: 0.25, fill: false, pointRadius: 4, yAxisID: 'y' },
-      { label: 'Looser cutoff (−13.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: false, yAxisID: 'y' },
-      { label: 'Stricter cutoff (−17.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(156, 163, 175, 0.16)', yAxisID: 'y' }
+      { label: 'Total water-like area (km²)', data: [], borderColor: BLUE, borderWidth: 2, tension: 0.25, fill: false, pointRadius: 4 },
+      { label: 'Looser cutoff (−13.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: false },
+      { label: 'Stricter cutoff (−17.5 dB)', data: [], borderColor: '#9CA3AF', borderDash: [3, 3], borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(156, 163, 175, 0.16)' }
     ]
   },
   options: {
@@ -299,7 +370,7 @@ function getPlainHeadline(d, base) {
 
 function getAlert(d, baseArea) {
   const ratio = d.water_km2 / baseArea;
-  if (d.date === '20261014') return { crit: false, title: 'LOW-WATER BASELINE', text: `${d.description}. Used as the reference baseline.` };
+  if (d.date === '20261014') return { crit: false, title: 'LOW-WATER BASELINE', text: 'Driest post-monsoon observation in our 10-date series. Used as the reference baseline.' };
   if (ratio >= 1.75) return { crit: true, title: 'HIGHEST WATER SEEN IN RECORD', text: `${d.description}. Note: no Track 040 observation was available Jul 27–Aug 10, so higher water could have occurred during that interval.` };
   if (ratio >= 1.35) return { crit: false, title: 'ELEVATED MONSOON WATER', text: `${d.description}. Seasonal water covers low-lying wetlands and secondary river channels.` };
   return { crit: false, title: 'MODERATE / RECEDING', text: `${d.description}. Surface water is retreating toward the main Brahmaputra channel.` };
@@ -318,34 +389,26 @@ function updateTable() {
   $('#headline').textContent = getPlainHeadline(d, base);
   $('#thStop').textContent = `${d.label} UTC`;
 
+  // Observation Metadata Panel
   $('#obsMeta').innerHTML =
     `<strong>OBSERVATION METADATA:</strong> ${d.label} 2026 UTC (${d.ist_label}) · ` +
     `${d.description.match(/Cycle \d+/)?.[0] || 'Track 040'} · Dual-pol HHHH+HVHV · ` +
     `Status: Available (PROVISIONAL CRID P05023) · Water cutoff: ${d.threshold_db.toFixed(1)} dB`;
 
-  const rows = [
+  $('#tbody').innerHTML = [
     ['Total water-like area', `${d.water_km2.toFixed(1)} km²`, isBase ? '—' : `+${extraKm2.toFixed(1)} km² (${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%)`],
     ['Threshold sensitivity (±2 dB)', `${d.water_low_km2.toFixed(0)}–${d.water_high_km2.toFixed(0)} km²`, 'Cutoff range'],
-    ['Frequently water-observed', `${S.meta.frequently_water_observed_km2.toFixed(0)} km²`, '8–10 of 10 passes'],
-    ['Vegetation shift (experimental)', `${vegTotal.toFixed(1)} km²`, 'HH or HV shift']
-  ];
-  if (d.rain_12d_mm != null) {
-    rows.push(['12-day IMERG rainfall', `${d.rain_12d_mm.toFixed(0)} mm`, 'Antecedent rain']);
-  }
-  $('#tbody').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+    ['Frequently water-observed', `${S.meta.persistent_water_km2.toFixed(0)} km²`, '8–10 of 10 passes'],
+    ['Vegetation radar change', `${vegTotal.toFixed(1)} km²`, 'HH or HV shift']
+  ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
 
   $('#advBody').innerHTML = [
     ['Scene mean HHHH / HVHV', `${d.mean_hh_db.toFixed(2)} / ${d.mean_hv_db.toFixed(2)} dB`],
     ['Increased HH (Amber class)', `${d.veg_double_bounce_km2.toFixed(1)} km²`],
     ['Changed HV (Violet class)', `${d.veg_hv_shift_km2.toFixed(1)} km²`],
-    ['Combined experimental shift', `${vegTotal.toFixed(1)} km² (disjoint union)`],
+    ['Combined vegetation shift', `${vegTotal.toFixed(1)} km² (disjoint union)`],
     ['Jul 22 #1 across all cutoffs', S.meta.jul22_highest_across_all_thresholds ? 'Confirmed (True)' : 'Varies']
   ].map(r => `<tr><td>${r[0]}</td><td style="text-align:right">${r[1]}</td></tr>`).join('');
-
-  $('#polNote').innerHTML =
-  `<strong>Why HHHH for water?</strong> Across our 10-date persistent river channel core vs. dry land, ` +
-  `HHHH shows a <strong>${S.meta.hh_core_channel_contrast_db.toFixed(1)} dB</strong> contrast vs. ` +
-  `<strong>${S.meta.hv_core_channel_contrast_db.toFixed(1)} dB</strong> for HVHV (note: channel masks were derived from HHHH; independent optical/DEM validation is future work).`;
 
   const al = getAlert(d, base.water_km2);
   const aEl = $('#alert');
@@ -380,19 +443,19 @@ function render() {
     $('#guideChip').textContent = '1. Drag the center line to compare · 2. Pick a date below · 3. Switch the view';
     $('#tagL').innerHTML = `<i class="sw" style="background:${BLUE}"></i>Oct 14 UTC · Baseline (${base.water_km2.toFixed(0)} km²)`;
     $('#tagR').innerHTML = `<i class="sw" style="background:${BLUE}"></i>${d.label} UTC · Water-like (${d.water_km2.toFixed(1)} km²)`;
-    $('#legendBar').innerHTML = `<i class="sw" style="background:${BLUE}"></i> <strong>Blue:</strong> Smooth water-like surface (HHHH &lt; −15.5 dB; includes river, beels, wet soil &amp; smooth dry sandbars)`;
+    $('#legendBar').innerHTML = `<i class="sw" style="background:${BLUE}"></i> <strong>Blue:</strong> Smooth water-like surface (HHHH &lt; −15.5 dB)`;
   } else if (S.mode === 'rgb') {
     $('#guideChip').textContent = '1. Drag the center line to compare · 2. Pick a date below · 3. Switch the view';
     $('#tagL').innerHTML = `<i class="sw" style="background:#2E5A44"></i>Oct 14 UTC · Baseline raw radar`;
     $('#tagR').innerHTML = `<i class="sw" style="background:#C2410C"></i>${d.label} UTC · Raw radar (R:HH G:HV B:HH−HV)`;
-    $('#legendBar').innerHTML = `<strong>Raw radar colors:</strong> Dark/black = Smooth open water or sand · Yellow-green = Tall grass &amp; canopy (high HV) · Pink/bright = Rough ground or double-bounce`;
+    $('#legendBar').innerHTML = `<strong>Raw radar colors:</strong> Dark/black = Smooth open water · Yellow-green = Tall grass &amp; canopy (high HV) · Pink/bright = Rough ground or double-bounce`;
   } else if (S.mode === 'freq') {
     $('#guideChip').textContent = 'Full-width 10-date wetness summary · Switch back to "Where water is" to swipe dates';
     $('#tagR').innerHTML = `<i class="sw" style="background:#0891B2"></i>All 10 Dates · Wetness classification frequency`;
     $('#legendBar').innerHTML = `<strong>Wetness frequency:</strong> <span style="background:#EDF8B1;padding:0 4px;border:1px solid #999">10–30%</span> Occasionally water-observed · <span style="background:#41B6C4;color:#fff;padding:0 4px">40–70%</span> Frequently water-observed · <span style="background:#081D58;color:#fff;padding:0 4px">80–100%</span> Persistent water signature`;
   } else {
-    $('#guideChip').textContent = 'Experimental L-band HH/HV change vs. Oct 14 baseline · Switch to "Satellite" below to inspect land cover';
-    $('#tagR').innerHTML = `<i class="sw" style="background:#D97706"></i>${d.label} UTC · Vegetation Radar Change (Experimental)`;
+    $('#guideChip').textContent = 'Exploratory L-band HH/HV change vs. Oct 14 baseline · Switch to "Satellite" below to inspect land cover';
+    $('#tagR').innerHTML = `<i class="sw" style="background:#D97706"></i>${d.label} UTC · Vegetation Radar Change vs. Oct 14`;
     $('#legendBar').innerHTML =
       `<span style="background:#D97706;color:#fff;padding:0 4px">Amber</span> <strong>Increased HH response:</strong> possible surface-water/vegetation interaction.<br>` +
       `<span style="background:#7C3AED;color:#fff;padding:0 4px">Violet</span> <strong>Changed HV response:</strong> possible vegetation structure or moisture change.`;
@@ -431,8 +494,7 @@ $('#rgrid').addEventListener('click', e => { const b = e.target.closest('button'
 
 function downloadCsv(rowsData, filename) {
   const H = ['date', 'label', 'ist_label', 'description', 'threshold_db', 'water_km2', 'water_low_km2', 'water_high_km2', 'water_pct_box', 'mean_hh_db', 'mean_hv_db', 'veg_double_bounce_km2', 'veg_hv_shift_km2'];
-  if (S.meta.has_imerg_rainfall) H.push('rain_12d_mm');
-  const rows = rowsData.map(d => H.map(k => `"${String(d[k] ?? '').replace(/"/g, '""')}"`).join(','));
+  const rows = rowsData.map(d => H.map(k => `"${String(d[k]).replace(/"/g, '""')}"`).join(','));
   const blob = new Blob(['\uFEFF' + [H.join(','), ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -464,16 +526,6 @@ async function init() {
     chart.data.datasets[1].data = S.meta.dates.map(d => d.water_high_km2);
     chart.data.datasets[2].data = S.meta.dates.map(d => d.water_low_km2);
 
-    if (S.meta.has_imerg_rainfall) {
-      $('#chartTitle').textContent = 'Water-like area (km²) vs. 12-day NASA IMERG rainfall (mm)';
-      chart.data.datasets.push({
-        type: 'bar', label: '12-day IMERG rain (mm)',
-        data: S.meta.dates.map(d => d.rain_12d_mm),
-        backgroundColor: 'rgba(15, 41, 66, 0.25)', yAxisID: 'y1', order: 3
-      });
-      chart.options.scales.y1 = { position: 'right', grid: { display: false }, border: { display: false }, title: { display: true, text: 'mm' } };
-    }
-
     $('#status').textContent = `${S.meta.sensor} · ${S.meta.product_status}`;
     place();
     render();
@@ -487,5 +539,120 @@ async function init() {
 map.whenReady(() => { place(); init(); });
 setTimeout(() => { map.invalidateSize(); place(); }, 250);
 </script>
+<!-- ===================== MOBILE LAYOUT PATCH ===================== -->
+<style id="mobile-fixes">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button{touch-action:manipulation}
+.tag:empty{display:none}
+
+/* Phones, and phones held sideways. Desktop/tablet layout is untouched. */
+@media (max-width:767px), (max-width:1023px) and (max-height:520px){
+  html,body{height:auto!important;min-height:100%}
+  body{display:flex!important;flex-direction:column!important;overflow-x:hidden}
+
+  /* Flatten the sidebar so its pieces can be re-ordered around the map:
+     title -> map + controls -> timeline -> zoom buttons -> details */
+  aside.side{display:contents!important}
+  .side>*{order:3;flex-shrink:0;align-self:center;width:calc(100% - 32px);max-width:760px;margin-left:0;margin-right:0;box-sizing:border-box;overflow-wrap:anywhere}
+  .side>.kick,.side>h1,.side>.dek,.side>.spec{order:0}
+  .side>.kick{margin-top:16px}
+  .side>h1{font-size:24px}
+  .side>.spec{margin-bottom:12px}
+  main{order:1;flex:none!important;display:block!important;width:100%;min-width:0}
+  .side>span.lab:first-of-type,.side>#rgrid,.side>#rtext{order:2}
+  .side>span.lab:first-of-type{margin-top:18px}
+  .side>#rgrid button{min-height:46px;font-size:11.5px}
+  .side>.dl-row{margin-bottom:6px}
+  .side>.dl-row .dl{min-height:44px;font-size:10.5px}
+  .side>.foot{word-break:break-word}
+  .side>div[style*="height:180px"]{height:250px!important}
+  .side>details{padding-bottom:2px}
+  .side summary{padding:12px 0;font-size:11px}
+  .side details code{overflow-wrap:anywhere;word-break:break-all}
+  .side>.lab:last-of-type{margin-bottom:9px}
+  .side>:last-child{margin-bottom:28px}
+
+  /* Map block: view buttons, labels, map, hint, legend stacked in normal flow
+     (on desktop these all float on top of the map and pile up on a small screen) */
+  #mapwrap{display:grid!important;grid-template-columns:1fr 1fr;row-gap:6px;flex:none!important;overflow:hidden;padding:0 16px;position:relative}
+  .ov,.ov-row{display:contents!important}
+  .seg{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:1fr 1fr;margin-top:4px}
+  .seg button{min-height:42px;padding:8px 6px;font-size:11px;line-height:1.2;text-align:center;border:0}
+  .seg button+button{border-left:0}
+  .seg button:nth-child(odd){border-right:1px solid var(--ink)}
+  .seg button:nth-child(-n+2){border-bottom:1px solid var(--ink)}
+  #tagL{grid-column:1;grid-row:2}
+  #tagR{grid-column:2;grid-row:2}
+  #tagL[style*="none"]~#tagR{grid-column:1/-1}
+  .tag{align-items:flex-start;padding:7px 8px;font-size:10px;line-height:1.35;letter-spacing:.02em;min-width:0;overflow-wrap:anywhere}
+  .tag .sw{margin-top:2px}
+  #map{position:relative!important;inset:auto!important;grid-column:1/-1;grid-row:3;width:auto;height:60vh!important;height:clamp(300px,60svh,560px)!important;min-height:300px;isolation:isolate;border:1px solid var(--ink)}
+  .basemap-toggle{position:relative!important;left:auto!important;bottom:auto!important;grid-column:1/-1;grid-row:3;justify-self:end;align-self:start;margin:8px;height:max-content}
+  .basemap-toggle button{min-height:36px;padding:6px 11px;font-size:10.5px}
+  .guide{grid-column:1/-1;grid-row:4;align-self:stretch;text-align:center;line-height:1.45;padding:7px 10px;letter-spacing:.03em}
+  .legend-bar{grid-column:1/-1;grid-row:5;align-self:stretch;max-width:none;font-size:11px;line-height:1.55;padding:9px 10px;margin-bottom:2px}
+
+  /* Swipe handle sits over the map row and is big enough for a thumb */
+  #dv{position:relative!important;top:auto;bottom:auto;grid-column:1/-1;grid-row:3;justify-self:start;align-self:stretch;height:auto;width:44px;margin-left:-22px}
+  #dv::before{left:21px;width:2px}
+  #dv button{width:44px;height:44px;margin-top:-22px;font-size:15px}
+
+  /* Timeline */
+  #time{padding:12px 16px 16px}
+  #time .lab{font-size:10px;line-height:1.5;letter-spacing:.02em;text-transform:none;margin-bottom:6px!important}
+  .slider-wrap{margin:8px 11px 0;width:auto}
+  input[type=range]{height:34px}
+  input[type=range]::-webkit-slider-thumb{width:24px;height:24px;margin-top:-12px;border-radius:50%}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%}
+  .gap-badge{top:8px;height:18px}
+  .stops{grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+  .stops button{border:1px solid var(--rule);min-height:46px;padding:6px 2px;font-size:11px;line-height:1.3}
+  .stops button small{font-size:10px}
+  .stops button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .stops button.on b{border-bottom:0}
+  .stops button:nth-child(5){border-left:3px solid var(--sienna)}
+
+  /* Tables become readable cards instead of three cramped columns */
+  .side table,.side thead,.side tbody{display:block;width:100%}
+  .side>table{width:calc(100% - 32px)}
+  .side thead tr{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--ink)}
+  .side thead th{border:0;padding:5px 0}
+  .side thead th:nth-child(1){display:none}
+  .side thead th:nth-child(2){grid-column:1;text-align:left;padding-left:0}
+  .side thead th:nth-child(3){grid-column:2;text-align:right}
+  #tbody tr{display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:end;padding:9px 0;border-bottom:1px solid var(--rule)}
+  #tbody td{border:0;padding:0}
+  #tbody td:nth-child(1){grid-column:1/-1;color:var(--mute);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+  #tbody td:nth-child(2){text-align:left;padding-left:0;font-size:15px;line-height:1.25}
+  #tbody td:nth-child(3){text-align:right;padding-left:0;font-size:11px;color:var(--mute);line-height:1.3}
+  #advBody tr{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--rule)}
+  #advBody td{border:0;padding:7px 0}
+  #advBody td:nth-child(2){text-align:right;padding-left:0}
+  .headline-box{font-size:14px}
+  .obs-meta{font-size:10.5px;word-break:break-word}
+}
+</style>
+<script>
+/* Mobile helpers: keep the map sized correctly when the layout reflows,
+   and bring the map back into view after a "Zoom to an area" tap. */
+(function () {
+  try {
+    var mq = window.matchMedia('(max-width:767px), (max-width:1023px) and (max-height:520px)');
+    var mapEl = document.getElementById('map');
+    var refit = function () { map.invalidateSize(); place(); };
+    if ('ResizeObserver' in window) {
+      var t;
+      new ResizeObserver(function () { clearTimeout(t); t = setTimeout(refit, 60); }).observe(mapEl);
+    }
+    var onChange = function () { setTimeout(refit, 80); };
+    if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+    document.getElementById('rgrid').addEventListener('click', function () {
+      if (mq.matches) mapEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  } catch (e) { console.error('mobile patch', e); }
+})();
+</script>
+<!-- =================== END MOBILE LAYOUT PATCH =================== -->
+
 </body>
 </html>
