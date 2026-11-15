@@ -150,10 +150,9 @@ kaziranga-sar-change-detector/
 - Basemaps: Esri World Topo Map and World Imagery. Libraries: Leaflet, Chart.js, Tailwind CSS.
 - Python packages: NumPy, SciPy, scikit-image, rasterio, Matplotlib, Pillow.
 
-## AI tools used
-
-We used Claude (Anthropic) for planning, explanations, code help and drafting documentation and slides. We ran and checked the processing pipeline and the web app ourselves.
 
 ## License
 
 See [LICENSE](LICENSE).
+
+Team - The_Larpers
